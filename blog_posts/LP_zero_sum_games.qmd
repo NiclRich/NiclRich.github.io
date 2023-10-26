@@ -1,0 +1,70 @@
+---
+title: "How to solve a zero sum game using linear programming"
+author: "Niclas"
+page-navigation: true
+back-to-top-navigation: true
+date: 2023-07-14
+---
+
+# How to solve a zero sum game using linear programming
+
+## The theoretical part
+
+My last undergraduate course in mathematics was about Game Theory, which was quite some time ago. One of the lectures covered Neumann's Minmax-Theorem, and during this session, the lecturer drew a picture on the blackboard to illustrate how to find the Nash Equilibrium of a zero-sum game. The drawing consisted of a set of linear inequalities, and he moved his hands along the edges of a simplex. While everyone in the lecture hall, including myself, was trying to grasp the explanation, it suddenly clicked, "Isn't this just linear programming?!?". Well... I was thinking with mouth moving... At that moment, the entire lecture hall turned to look at me, but the lecturer simply replied with a straightforward "yes."
+
+Nevertheless, it took quite some time until I stumbled upon a resource that explained the connection between game theory and linear programming, or more generally, mathematical optimization. I found the following statement in [\[1\]](#1):
+
+**Theorem** Given a zero-sum matrix game with payoff matrix $A$ is an $n\times m$ matrix with real entries and $$ \hat{X} := \{ x \in \mathbb{R}^n \| \sum_{i=1}^n x_i = 1, x \geq 0 \}, \\ \hat{Y} := \{ y \in \mathbb{R}^m \| \sum_{i=1}^m y_i = 1, y \geq 0\}$$ as the sets of mixed strategies. The payoff function is for both players is given by $$ \theta(x,y) = x^\top A y $$ and player $X$ wants to maximize it, while player $Y$ wants to minimize it. The point $(x^\ast, y^\ast) \in \hat{X} \times \hat{Y}$ iff the following two points hold:
+
+1.  $x^\ast$ together with a scalar value $v^\ast$ solves the primal linear program
+
+$$ \max_{v,x} v \text{\quad s.t.\quad} x^\top A \geq ve^\top, x \in \hat{X}$$
+
+2.  $y^\ast$ together with a scalar value $w^\ast$ solve the dual linear program
+
+$$\min_{y,w} w \text{\quad s.t.\quad} A y \leq we, y \in \hat{Y}.$$ The vector $e = (1, ..., 1)^\top$ has the suitable dimension.
+
+This theorem reduces the finding the Nash-equilibrium to solving a linear program which is relatively easy. Now let's turn to a concrete calculation.
+
+## Code Example
+
+We implement a simple example given in \[\[1\]\] on p. 67 using [JuMP](https://jump.dev/), a Julia package for solving optimization problems. The payoff matrix is given by $$ A = \begin{pmatrix} 1 & 0 \\ -1 & 2 \end{pmatrix} $$. After executing the code below, it can be seen that the value of the game is $0.5$ and the strategy for the first player is indeed $x^\ast = (0.75, 0.25)^\top$.
+
+```{julia}
+using JuMP
+using HiGHS
+
+# Define the payoff matrix
+A = [1 0; -1 2]
+
+dim_player1 = size(A, 1)
+dim_player2 = size(A, 2)
+
+# Solve the primary problem +++++++++++++++++++++++++++++++++++++++++++++++++++
+## Set up the model using the HiGHS solver
+model = Model(HiGHS.Optimizer)
+
+## Define the variables
+@variable(model, x[1:dim_player1] >= 0)
+@variable(model, v)
+e1 = ones(1, dim_player1)
+
+## Define the constraints
+@constraint(model, sum(x) == 1)
+@constraint(model, transpose(x) * A .>= v .* e1)
+
+## Define the objective function for the primal problem
+@objective(model, Max, v)
+
+## Solve the optimization problem
+optimize!(model)
+
+# Output of the values for the Nash equilibrium
+strategy_player1 = [value(x[i]) for i in 1:dim_player1]
+println("Nash equlibrium strategy for player 1:\t $strategy_player1")
+println("Value for Player 1:\t $(objective_value(model))")
+```
+
+## References
+
+<a id="1">\[1\]</a> *C. Kanzow* and *A. Schwartz*, Spieltheorie. Theorie und Verfahren zur Lösung von Nash- und verallgemeinerten Nash-Gleichgewichtsproblemen. Cham: Birkhäuser (2018; Zbl 1418.91004)

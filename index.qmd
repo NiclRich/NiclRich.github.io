@@ -1,0 +1,19 @@
+---
+title: "A curious mathematician"
+author: "Niclas"
+about:
+  template: trestles
+  image: profile.jpg
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/NiclRich
+---
+# Bio
+My name is Niclas Richter, a mathematician by training, currently working as a Data Expert in the field of official statistics. I am passionate about exploring computational methods and utilizing quantitative approaches to solve diverse problems, with expertise in Julia, R, and Python. Generally, I am an inquisitive person, which is why I've named this website *'A Curious Mathematician'*.
+
+I hold a degree (B.Sc.) in Mathematics after studying at TU Dresden and the Hebrew University of Jerusalem.
+
+# About 
+The website is hosted on [GitHub Pages](https://pages.github.com/) with
+[Quarto](https://quarto.org/). All contents is published under the [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/legalcode) and the code is licensed under the [MIT Licence](https://opensource.org/license/mit/).

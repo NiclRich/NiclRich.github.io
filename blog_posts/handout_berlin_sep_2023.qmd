@@ -1,0 +1,11 @@
+---
+title: "The answer to an ever repeating question"
+author: "Niclas"
+date: 2020-09-01
+---
+
+Everyone who studies math or has studied math in the past, has heard the question $\aleph_0$-times: "What are you going to do with a degree in math?". I gave an presentation about it in a German school in Berlin. The slides and the handout (in German) can be found here:
+
+[Handout](https://github.com/NiclRich/blog/blob/main/other/presentation_berlin_2023-09-01/Handout-OS_Ernst_Haeckel_Berlin_20230901.pdf)
+
+[Slides](https://github.com/NiclRich/blog/blob/main/other/presentation_berlin_2023-09-01/Slides-OS_Ernst_Haeckel_Berlin_20230901.pdf)

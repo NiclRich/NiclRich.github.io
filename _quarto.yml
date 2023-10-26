@@ -1,0 +1,27 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: " A curious mathematician"
+  site-url: https://niclrich.github.io/
+  description: "A curious mathematician interested in various things"
+  navbar:
+    right:
+      - href: index.qmd
+        text: Home
+      - href: blog.qmd
+        text: Blog
+  page-footer:
+    left: "© Copyright 2022 Niclas Richter. Except where otherwise noted, all text and images licensed CC-BY-NC 4.0."
+  page-navigation: true
+  search: true
+
+format:
+  html:
+    theme: sandstone
+    css: styles.css
+    toc: true
+
+editor: visual
+
