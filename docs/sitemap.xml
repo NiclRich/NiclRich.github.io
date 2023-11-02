@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://niclrich.github.io/index.html</loc>
-    <lastmod>2023-10-26T20:26:30.693Z</lastmod>
+    <lastmod>2023-10-31T18:23:11.555Z</lastmod>
   </url>
   <url>
     <loc>https://niclrich.github.io/blog_posts/handout_berlin_sep_2023.html</loc>
@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://niclrich.github.io/blog.html</loc>
-    <lastmod>2023-10-26T20:26:12.385Z</lastmod>
+    <lastmod>2023-11-02T21:13:45.348Z</lastmod>
   </url>
   <url>
     <loc>https://niclrich.github.io/about.html</loc>
@@ -23,5 +23,9 @@
   <url>
     <loc>https://niclrich.github.io/blog_posts/choropleth_map_brandenburg.html</loc>
     <lastmod>2023-10-26T20:26:30.417Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog_posts/arima_modeling.html</loc>
+    <lastmod>2023-11-02T21:15:40.833Z</lastmod>
   </url>
 </urlset>

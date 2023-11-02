@@ -1,0 +1,409 @@
+---
+title: "Forecasting Wikipedia page views with seasonal ARIMA models"
+author: "Niclas"
+date: 2023-10-31
+execute: 
+  warning: false
+reference-location: margin
+citation-location: margin
+bibliography: references.bib
+title-block-style: plain
+format: 
+  html:
+    self-contained: true
+    code-fold: true
+    code-tools: true
+---
+
+One may say that the future is not predictable, which is true most of the time. However humans recognize repeating patterns and know that it is colder in winter than in summer and expect therefore lower temperatures in winter. To quantify those expectations is difficult, especially for complex phenomena like the weather. For less complex systems we can use ARIMA models to predict future values of time series. In this blog post I am going to explain how ARIMA models can be used to forecast page views of Wikipedia articles using `R`.
+
+# Acquiring the data
+
+First of all we need some data to build our model and preprocess the data, so we load some packages.
+
+```{r}
+#| eval: true
+#| warning: false
+#| code-fold: true
+
+# packages for data wrangling
+library(lubridate)
+library(dplyr)
+library(httr2)
+library(jsonlite)
+library(glue)
+library(kableExtra)
+
+# packages for times series
+library(feasts)
+library(tsibble)
+library(fable)
+library(zoo)
+
+# graphics
+library(ggplot2)
+library(scales)
+# google trends
+library(gtrendsR)
+```
+
+Wikimedia offers a REST [API](https://wikimedia.org/api/rest_v1/#/Pageviews%20data) to retrieve page views from various Wikimedia projects, such as the English version of Wikipedia.  In order to interact with the API, I've written a function that handles the API requests, which you can view in the code below.
+
+```{r}
+#| eval: true
+#| warning: false
+#| code-fold: true
+#| code-summary: Function to get page views of Wikipedia articles
+
+
+#' Get Wikipedia Page Views Data
+#'
+#' Retrieve page views data for a Wikipedia article.
+#'
+#' @param article The title of the Wikipedia article.
+#' @param project The Wikipedia project (default: "en.wikipedia").
+#' @param access Type of access (default: "all-access").
+#'   Must be one of: "all-access", "desktop", "mobile-app", "mobile-web".
+#' @param agent Type of agent (default: "all-agents").
+#'   Must be one of: "all-agents", "user", "spider", "automated".
+#' @param granularity Data granularity (default: "daily").
+#'   Must be one of: "daily", "monthly".
+#' @param start Start date (in Date format) for the data retrieval.
+#' @param end End date (in Date format) for the data retrieval.
+#'
+#' @return A tibble containing the retrieved page views data.
+#'
+#' @details This function retrieves page views data for a Wikipedia article
+#' using the Wikimedia REST API.
+#'
+#' @seealso [Wikimedia REST API Documentation](https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/)
+#'
+#' @examples
+#' \dontrun{
+#'   article_data <- get_wiki_pageviews("Example_Article", start = as.Date("2023-01-01"), end = as.Date("2023-01-31"))
+#'   print(article_data)
+#' }
+#'
+#' @import httr2
+#' @import jsonlite
+#' @import lubridate
+#' @import dplyr
+#' @importFrom glue glue
+#'
+#' @export
+get_wiki_pageviews <- function(article,
+                               project = "en.wikipedia",
+                               access = c("all-access", "desktop", "mobile-app", "mobile-web"),
+                               agent = c("all-agents", "user", "spider", "automated"),
+                               granularity = c("daily", "monthly"),
+                               start,
+                               end) {
+  # allow only specified arguments
+  access <- match.arg(access)
+  agent <- match.arg(agent)
+  granularity <- match.arg(granularity)
+  
+  # allow only Date types for start and end
+  stopifnot(is.Date(start))
+  stopifnot(is.Date(end))
+  
+  # convert to the date format YYYYMMDD
+  start <- format(start, "%Y%m%d")
+  end <- format(end, "%Y%m%d")
+  
+  # create the request
+  url <- glue("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{project}/{access}/{agent}/{article}/{granularity}/{start}/{end}")
+  req = request(url)
+  # perform the request
+  wiki_response <- req_perform(req)
+  
+  # convert request to a tibble if response is sucessful
+  if (wiki_response$status_code == 200) {
+    wiki_response <- resp_body_json(wiki_response)$items
+    wiki_response <- do.call(rbind, lapply(wiki_response, as_tibble)) %>%
+      mutate(timestamp = ymd_h(timestamp))
+  } else {
+    cat("Error: Unable to retrieve page views data.\n")
+    return(NULL)
+  }
+}
+```
+
+There are a vast range of possibilities to choose a specific article. For example when a famous person dies, the number of page views can increase drastically ([for example Queen Elisabeth II](https://pageviews.wmcloud.org/?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2015-07&end=2023-09&pages=Elizabeth_II)) or singular events happen which are covered by the media. Also, the Wikipedia page for small villages in rural areas have basically no traffic. Hence I have opted for an undergraduate topic which is taught in basically all universities around the globe: [the Euler method](https://en.wikipedia.org/wiki/Euler_method).
+
+In the first step, we retrieve the page view data from July 2015 to September 2023 and perform a train/test split. The training data consists of the data until December 2021, and the rest constitutes the test data.
+
+The following code loads the page view data, converts the data into a [tsibble](https://tsibble.tidyverts.org/) for tidy time series objects[@Wang2020] and do the train/test split.
+
+```{r}
+#| code-fold: true
+# Define constants in the program
+Wikipedia_article <- "Euler_method"
+start_period <- as_date("2015-07-01")
+end_period <- as_date("2023-09-30")
+train_split_date <- as_date("2022-01-01")
+
+# get the page views from the API for monthly data
+wiki_page_views <- get_wiki_pageviews(Wikipedia_article, 
+                                      agent = "user",
+                                      access = "all",
+                                      granularity = "monthly", 
+                                      start = start_period, 
+                                      end = end_period)
+
+# get the page views from the API for daily data
+wiki_page_views_daily <- get_wiki_pageviews(Wikipedia_article, 
+                                      agent = "user",
+                                      access = "all",
+                                      granularity = "daily", 
+                                      start = start_period, 
+                                      end = end_period)
+
+# converting to tsiblle objects
+wiki_page_views <- wiki_page_views %>%
+  select(timestamp, views) %>%
+  mutate(timestamp = yearmonth(timestamp)) %>%
+  as_tsibble(index = timestamp)
+
+wiki_page_views_daily <- wiki_page_views_daily %>%
+  select(timestamp, views) %>%
+  mutate(timestamp = as_date(timestamp)) %>%
+  as_tsibble(index = timestamp)
+
+# Doing the train / test split
+test_data <- wiki_page_views %>%
+  filter(as_date(timestamp) >= train_split_date)
+
+training_data <- wiki_page_views %>%
+  filter(as_date(timestamp) < train_split_date)
+```
+
+# A first analysis of the data
+
+```{r}
+#| warning: false
+#| code-fold: true
+#| code-overflow: scroll
+#| code-summary: "Show code for the plot"
+#| label: figDaily
+#| fig-cap: "Daily page views of the Wikipedia article for the Euler Method. The daily values are in light blue and the 7 day moving average in red."
+
+wiki_page_views_daily %>%
+  mutate(moving_avg = zoo::rollmean(views, 7, fill = NA)) %>%
+  ggplot() +
+  geom_line(aes(timestamp, views), color = "lightblue") + 
+  geom_line(aes(timestamp, moving_avg), color = "red") +
+  theme_light() +
+  ylim(0, 1.1 * max(wiki_page_views_daily$views)) +
+  scale_x_date(breaks = breaks_width("1 year"), labels = date_format("%b %y")) +
+  labs(title = paste("Daily Wikipedia page views:", 
+                     stringr::str_replace(Wikipedia_article, "_", " "))) + 
+  xlab("Date") + 
+  ylab("Page views per day")
+
+```
+
+First, let's take a look at the figure above, which displays the daily page views starting from July 2015. There is considerable variability in the data, making it challenging to interpret. To enhance data readability, we've also included a 7-day moving average plot. 
+We can make two oberservations:
+
+1.  The year 2017 has significantly more page views than the rest of the data. This observation will likely be seen in the test, since it is in the training data.
+2.  There are recurring seasonal patterns, such as a sharp drop in the last week of the year, which is likely related to Christmas. Additionally, there are drops in March and during the summer, possibly because university students are less likely to read math articles on Wikipedia when there are no lectures during these times.
+
+Unfortunately, ARIMA models don't work well with daily data, where there is a seasonal period of 365 days [see @Hyndman2021, 10.5 Dynamic harmonic regression]. Furthermore the number of page views depends on the day of the week as an ANOVA shows (see the margin note on the right), which complicates the modelling process.
+```{r}
+#| code-fold: true
+#| code-summary: Code for ANOVA
+#| column: margin
+
+wiki_page_views_daily %>%
+  mutate(weekday = weekdays(timestamp)) %>%
+  select(views, weekday) %>%
+  aov(views ~ weekday, data = .) %>%
+  summary()
+```
+
+Therefore, we focus on monthly values and first plot the monthly page views for the article in question.
+
+```{r}
+#| label: figMonthly
+#| code-fold: true
+#| code-summary: "Show code for the plot"
+#| fig-cap: "Page views of the Wikipedia article for the Euler Method. The monthly values are in blue."
+#| warning: false
+wiki_page_views %>%
+  mutate(timestamp = as_date(timestamp)) %>%  # date class is required for ggplot
+  ggplot() +
+  geom_line(aes(timestamp, views), color = "blue") + 
+  theme_light() +
+  ylim(0, 1.1 * max(wiki_page_views$views)) +
+  scale_x_date(breaks = breaks_width("2 year"), labels = date_format("%b %y")) +
+  scale_y_continuous(labels = label_number()) +
+  labs(title = paste("Monthly Wikipedia page views:", 
+                     stringr::str_replace(Wikipedia_article, "_", " "))) + 
+  xlab("Date") + 
+  ylab("Page views per month")
+```
+
+The monthly observations are just the addition of the daily values, however several effects are disguised and are not so obvious like before, such as the effect of Christmas or the number of weekdays, which influence the number of views per month. The decline can also be seen more clearly in the monthly data as it reduces the daily variability.
+
+::: column-margin
+Actually it is possible calculate the trend of a seasonal time series. This is called seasonal adjustment.
+:::
+
+```{r}
+#| label: figSeason
+#| fig-cap: "Seasonal plot for the page views. For each year the page views from January to December are plotted."
+#| code-fold: true
+#| code-summary: "Show code for the plot"
+wiki_page_views %>%
+  gg_season(views) + 
+  theme_light() +
+  labs(title = "Seasonal plot for pages views") +
+  ylim(0, 1.1 * max(wiki_page_views$views)) +
+  xlab("Month") + 
+  ylab("number of page views")
+```
+
+With this perspective it is possible to see the seasonal pattern more clearly in figure above. Nevertheless, some of the effects are dampened, like the Christmas effect. The autocorrelation function (which is simply the Pearson correlation coefficient between the lags) in the figure below shows a high correlation after one lag ($\rho_1 \approx 0.7$) and after 12 months ($\rho\_{12} \approx 0.53$), which is the seasonality of our time series.
+
+```{r}
+#| label: figACF
+#| fig-cap: "Autocorrelation plot of the data"
+#| code-fold: true
+#| code-summary: "Show code for the plot"
+wiki_page_views %>%
+  ACF(views) %>%
+  autoplot() +
+  theme_light()
+```
+
+# ARIMA Modeling
+
+In order to calculate our forecast we use a seasonal ARIMA-model. An good introduction is @Shumway2006, where the following part is adapted from. The back casting operator $B^k$ is defined as
+
+$$
+B^k x_t = x_{t-k}
+$$
+
+for $k \in \mathbb{N}$. This leads straightforward to the difference operator
+
+$$
+\nabla^d x_t = (1- B)^d x_t 
+$$
+
+and the seasonal difference operator
+
+$$
+\nabla_s^Dx_t = (1 - B^s)^D x_t.
+$$
+
+The order of the difference $D$ or $d$ is a non-negative integer. The superscript indicates the repeated use of the operator, e.g. $\nabla^{d+1} = \nabla \circ\nabla^d$. Using this can be plugged into an ARMA with
+
+$$
+\Phi_P(B^s)\phi_p(B)\nabla_s^D\nabla^d x_t = \alpha + \Theta_Q(B^s)\theta_q(B) \omega_t
+$$
+
+where $\Phi, \Theta, \phi, \theta$ are formal polynomials of the respective operator and the subscript denotes the order of the polynomial and $\alpha \in \mathbb{R}$ and $\omega_t$ is Gaussian white noise. This model is called *seasonal autoregressive integrated moving average model* or short *SARIMA*. The model is usually denoted by $ARIMA(p,d,q)\times (P,D,Q)_s$.
+
+Fitting an SARIMA model is not easy (perhaps I will explain it in another blog post). The `fable` package [see @Hyndman2008] in `R` makes it easy for the user to handle the modeling, especially since it searches the model space for the model with the lowest AIC. However it still requires knowledge from the person modeling it.
+
+We try 3 different models and test them, namely:
+
+-   Without transforming the values,
+
+-   taking the logarithm of the page views and,
+
+-   using the Box-Cox-Transform after using the Guerrero-method [@Guerrero1993] for determining $\lambda$.
+
+```{r}
+# Find \lambda using the Guerrero
+lambda <- training_data %>%
+  features(views, features = guerrero) %>%
+  pull(lambda_guerrero)
+
+# model the different ARIMA models
+sarima <- training_data %>%
+  model(log_arima = ARIMA(log(views) ~ 1 + pdq() + PDQ()),
+        box_cox_arima = ARIMA(box_cox(views, lambda) ~ 1 + pdq() + PDQ()),
+        arima = ARIMA(views ~ 1 + pdq() + PDQ())) 
+
+# Output the different models
+report(sarima) 
+
+# compute the forecast
+forecasted_values <- forecast(sarima, h = "21 months")
+```
+
+We compare the different forecasts with our test data with the `accuracy` function from `fabletools` and observe that the ARIMA model without transforming the values works best. Hence we choose this model, however each of these models exhibits a bias, since the mean error is not even close to zero.
+
+```{r}
+accuracy(forecasted_values, test_data) %>% select(-c("MASE", "RMSSE")) %>% kable()
+```
+
+We can now output the model and inspect the residuals. We notice that those are approximately normally distributed except for the outlier in 2017. However there is no significant autocorrelation and the best model for this time series is an $ARIMA(1,0,0)\times(2,1,0)_{12}$ model
+
+```{r}
+#| code-fold: true
+#| code-summary: "Code for post processing the data"
+# Output the model
+sarima %>%
+  select(arima) %>%
+  report()
+
+# Inspect the residuals
+sarima %>%
+  select(arima) %>%
+  gg_tsresiduals()
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code for the plot"
+#| label: "figTest"
+#| fig-cap: "Forecasted values with confidence intervals in blue and true values in red"
+forecasted_values %>%
+  filter(.model == "arima") %>%
+  autoplot() +
+  geom_line(data = wiki_page_views, mapping = aes(timestamp, views), color = "red") +
+  theme_light() +
+  labs(title = "Forecasted values vs. test data") +
+  ylab("page views") +
+  xlab("date")
+```
+
+When we plot our forecast we see that the already mentioned bias, which overestimates the page views. It seems like that the declining trend is not captured very well. The spring high in 2022 was estimated to high and the impact of December is not so good modeled by this model. However it estimates the page views with a mean error of 6% which is quite good for an off the shelve method.
+
+# Why not using external data?
+
+At this point, an interested reader might ask, why don't we use an external data source as an predictor. The `fable` package supports ARIMAX-Models, which enable us to use exogenous data (that's why the name ARIMAX). For more information on ARIMAX-models see also @Shumway2006 as a reference.
+
+An external data source could be Google trends, since Google has a huge market share on search engines. The package `gtrends` allows an easy access to via `R`.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code for Google trends"
+google_trend_euler_method <- gtrends("euler method", time = paste(as.character(start_period), as.character(end_period)))
+
+google_trend_euler_method <- google_trend_euler_method$interest_over_time %>%
+  select(date, hits) %>%
+  mutate(date = yearmonth(date)) %>%
+  tsibble(index = date)
+
+wiki_google_trend <- inner_join(google_trend_euler_method, wiki_page_views, by = c("date" = "timestamp"))
+
+rho <- cor(wiki_google_trend$views, wiki_google_trend$hits)
+
+wiki_google_trend %>%
+  ggplot() +
+  geom_line(aes(date, views / max(views), color = "Wikipedia page views")) +
+  geom_line(aes(date, hits / max(hits), color = "Google trends")) +
+  theme_light() +
+  theme(axis.text.y=element_blank()) +
+  labs(title = "Google trends and Wikipedia for the term 'Euler Method'", color = "Source") +
+  xlab("Month") +
+  ylab("Accesses")
+  
+
+```
+
+Since Google Trends provides indices where the maximum is indicated by the value 100, I rescaled both data sets to have values between 0 and 1. Until 2021 it is a good approximation, however after 2022 it becomes less accurate. The correlation coefficient is $\rho = 0.738$, which is quite high. But if we plug it into our ARIMA model, floating point errors render the model unusable.
