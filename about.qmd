@@ -6,5 +6,4 @@ My name is Niclas Richter, a mathematician by training, currently working as a D
 
 I hold a degree (B.Sc.) in Mathematics after studying at TU Dresden and the Hebrew University of Jerusalem.
 
-The website is hosted on [GitHub Pages](https://pages.github.com/) with
-[Quarto](https://quarto.org/). All contents is published under the [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/legalcode) and the code is licensed under the [MIT Licence](https://opensource.org/license/mit/).
+The website is hosted on [GitHub Pages](https://pages.github.com/) with [Quarto](https://quarto.org/). All contents is published under the [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/legalcode) and the code is licensed under the [MIT Licence](https://opensource.org/license/mit/).

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://niclrich.github.io/index.html</loc>
-    <lastmod>2023-10-31T18:23:11.555Z</lastmod>
+    <lastmod>2024-01-15T13:53:39.169Z</lastmod>
   </url>
   <url>
     <loc>https://niclrich.github.io/blog_posts/handout_berlin_sep_2023.html</loc>
@@ -10,11 +10,11 @@
   </url>
   <url>
     <loc>https://niclrich.github.io/blog.html</loc>
-    <lastmod>2023-11-02T21:13:45.348Z</lastmod>
+    <lastmod>2024-01-15T13:53:42.161Z</lastmod>
   </url>
   <url>
     <loc>https://niclrich.github.io/about.html</loc>
-    <lastmod>2023-10-26T20:26:11.469Z</lastmod>
+    <lastmod>2023-11-05T08:15:01.698Z</lastmod>
   </url>
   <url>
     <loc>https://niclrich.github.io/blog_posts/LP_zero_sum_games.html</loc>
@@ -26,6 +26,10 @@
   </url>
   <url>
     <loc>https://niclrich.github.io/blog_posts/arima_modeling.html</loc>
-    <lastmod>2023-11-02T21:15:40.833Z</lastmod>
+    <lastmod>2024-01-15T13:56:54.429Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog_posts/kdv_equation.html</loc>
+    <lastmod>2024-01-15T13:56:59.133Z</lastmod>
   </url>
 </urlset>

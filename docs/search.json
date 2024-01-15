@@ -18,7 +18,7 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "On this blog I write about different methodologies on working with data and computation. Personally I’m not so interested in the results, but rather the way they are obtained.\n\n\n\n\n\n\n\n\n\n\n\n\nForecasting Wikipedia page views with seasonal ARIMA models\n\n\n\n\n\n\nNiclas\n\n\nOct 31, 2023\n\n\n\n\n\n\n\n\n\n\n\n\nHow to create a choroplath map in R\n\n\n\n\n\n\nNiclas\n\n\nAug 24, 2023\n\n\n\n\n\n\n\n\n\n\n\n\nHow to solve a zero sum game using linear programming\n\n\n\n\n\n\nNiclas\n\n\nJul 14, 2023\n\n\n\n\n\n\n\n\n\n\n\n\nThe answer to an ever repeating question\n\n\n\n\n\n\nNiclas\n\n\nSep 1, 2020\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "On this blog I write about different methodologies on working with data and computation. Personally I’m not so interested in the results, but rather the way they are obtained.\n\n\n\n\n\n\n\n\n\n\n\n\nForecasting Wikipedia page views with seasonal ARIMA models\n\n\n\n\n\n\nNiclas\n\n\nOct 31, 2023\n\n\n\n\n\n\n\n\n\n\n\n\nHow to create a choroplath map in R\n\n\n\n\n\n\nNiclas\n\n\nAug 24, 2023\n\n\n\n\n\n\n\n\n\n\n\n\nHow to solve a zero sum game using linear programming\n\n\n\n\n\n\nNiclas\n\n\nJul 14, 2023\n\n\n\n\n\n\n\n\n\n\n\n\nThe Zabusky-Kruskal scheme\n\n\n\n\n\n\nNiclas\n\n\n\n\n\n\n\n\n\n\n\n\nThe answer to an ever repeating question\n\n\n\n\n\n\nNiclas\n\n\nSep 1, 2020\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -117,5 +117,26 @@
     "title": "Forecasting Wikipedia page views with seasonal ARIMA models",
     "section": "References",
     "text": "References"
+  },
+  {
+    "objectID": "blog_posts/kdv_equation.html",
+    "href": "blog_posts/kdv_equation.html",
+    "title": "The Zabusky-Kruskal scheme",
+    "section": "",
+    "text": "While browsing Wikipedia for random bits of mathematical knowledge, I stumbled across the the article on Korteveg-De Vries equation (hereafter abbreviated as KdV-equation) with this gif. It shows the evolution of a cosine wave through time and the caption claims, that it was computed using the Zabusky-Kruskal-scheme. I had never heard of it, until I read the article. So I decided to take some time to write a blog post about it."
+  },
+  {
+    "objectID": "blog_posts/kdv_equation.html#the-kdv-equation",
+    "href": "blog_posts/kdv_equation.html#the-kdv-equation",
+    "title": "Finite Differences for the KdV Equation",
+    "section": "The KdV-equation",
+    "text": "The KdV-equation\nThe Korteveg-de-Vries equation (in the follwing just KdV-equation) is a nonlinear partial differential equation given by\n\\[\nu_t + u_{xxx} + 6uu_x = 0\n\\tag{1}\\]\nin \\(\\mathbb{R} \\times (0, \\infty)\\). By the subscripts we denote the temporal and spatial partial derivatives. For further computations we sightly generalize the KdV-equation to\n\\[\n\\alpha u_t + \\beta u_{xxx} + \\gamma u u_x = 0\n\\tag{2}\\]\nfor the real numbers $, , $. The Wikipedia article mentions the Zabusky-Kruskal scheme (ZKS) as the method which is used. This is a finite difference scheme on a two dimensional Cartesian grid. So we look up in the original article Zabusky and Kruskal (1965) and adapt the mentioned scheme to our setting and rearrange the terms. This leads to\n\\[\n0 = \\alpha (\\frac{u_i^{j+1} - u_i^{j-1}}{2\\Delta t}) + \\beta (\\frac{- u_{i-2}^j + 2u_{i-1}^j - 2u_{i+1}^j + u_{i+2}^j}{2 \\Delta x^3}) + \\frac{\\gamma}{3}(u_{i-1}^j + u_i^j + u_{i+1}^j)\\frac{u_{i+1}^j - u_{i-1}^j}{2\\Delta x}.\n\\tag{3}\\]\nHere we denote by \\(u_i^j = u(i\\Delta x, j \\Delta t)\\) the value at the grid point for the function \\(u(x,t)\\). The ZKS is an explicit scheme in time, however it needs two time epochs to calculate the next step. In order to use it, we have to make a step backwards in time with an implicit approximation of the time derivative. Furthermore the ZKS uses periodic boundary conditions and the animation, we want to reconstruct also uses periodic boundary conditions, so it is not a problem for us."
+  },
+  {
+    "objectID": "blog_posts/kdv_equation.html#the-korteveg-de-vries-equation",
+    "href": "blog_posts/kdv_equation.html#the-korteveg-de-vries-equation",
+    "title": "The Zabusky-Kruskal scheme",
+    "section": "The Korteveg-De Vries-equation",
+    "text": "The Korteveg-De Vries-equation\nThe KdV-equation is a nonlinear partial differential equation given by\n\\[\nu_t + u_{xxx} + 6uu_x = 0\n\\tag{1}\\]\nin \\(\\mathbb{R} \\times (0, \\infty)\\). By the subscripts we denote the temporal and spatial partial derivatives. For further computations we sightly generalize the KdV-equation to\n\\[\n\\alpha u_t + \\beta u_{xxx} + \\gamma u u_x = 0\n\\tag{2}\\]\nfor the real numbers $, , $. The Wikipedia article mentions the Zabusky-Kruskal scheme (ZKS) as the method which is used. The ZKS is a finite difference scheme on a two dimensional Cartesian grid. So we look up in the original article Zabusky and Kruskal (1965) and adapt the mentioned scheme to our setting and rearrange the terms. This leads to\n\\[\n0 = \\alpha (\\frac{u_i^{j+1} - u_i^{j-1}}{2\\Delta t}) + \\beta (\\frac{- u_{i-2}^j + 2u_{i-1}^j - 2u_{i+1}^j + u_{i+2}^j}{2 \\Delta x^3}) + \\frac{\\gamma}{3}(u_{i-1}^j + u_i^j + u_{i+1}^j)\\frac{u_{i+1}^j - u_{i-1}^j}{2\\Delta x}.\n\\tag{3}\\]\nHere we denote by \\(u_i^j = u(i\\Delta x, j \\Delta t)\\) the value at the grid point for the function \\(u(x,t)\\). The ZKS is an explicit scheme in time, which needs two time epochs to calculate the next step. To use it, we have to make a step backwards in time with an implicit approximation of the time derivative before we do the first step. Furthermore the ZKS uses periodic boundary conditions for setting appropriate boundary conditions of an unbounded domain."
   }
 ]

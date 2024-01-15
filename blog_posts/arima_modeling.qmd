@@ -47,7 +47,7 @@ library(scales)
 library(gtrendsR)
 ```
 
-Wikimedia offers a REST [API](https://wikimedia.org/api/rest_v1/#/Pageviews%20data) to retrieve page views from various Wikimedia projects, such as the English version of Wikipedia.  In order to interact with the API, I've written a function that handles the API requests, which you can view in the code below.
+Wikimedia offers a REST [API](https://wikimedia.org/api/rest_v1/#/Pageviews%20data) to retrieve page views from various Wikimedia projects, such as the English version of Wikipedia. In order to interact with the API, I've written a function that handles the API requests, which you can view in the code below.
 
 ```{r}
 #| eval: true
@@ -203,13 +203,13 @@ wiki_page_views_daily %>%
 
 ```
 
-First, let's take a look at the figure above, which displays the daily page views starting from July 2015. There is considerable variability in the data, making it challenging to interpret. To enhance data readability, we've also included a 7-day moving average plot. 
-We can make two oberservations:
+First, let's take a look at the figure above, which displays the daily page views starting from July 2015. There is considerable variability in the data, making it challenging to interpret. To enhance data readability, we've also included a 7-day moving average plot. We can make two oberservations:
 
 1.  The year 2017 has significantly more page views than the rest of the data. This observation will likely be seen in the test, since it is in the training data.
 2.  There are recurring seasonal patterns, such as a sharp drop in the last week of the year, which is likely related to Christmas. Additionally, there are drops in March and during the summer, possibly because university students are less likely to read math articles on Wikipedia when there are no lectures during these times.
 
 Unfortunately, ARIMA models don't work well with daily data, where there is a seasonal period of 365 days [see @Hyndman2021, 10.5 Dynamic harmonic regression]. Furthermore the number of page views depends on the day of the week as an ANOVA shows (see the margin note on the right), which complicates the modelling process.
+
 ```{r}
 #| code-fold: true
 #| code-summary: Code for ANOVA

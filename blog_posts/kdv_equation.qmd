@@ -1,0 +1,473 @@
+---
+title: "The Zabusky-Kruskal scheme"
+author: "Niclas"
+reference-location: margin
+citation-location: margin
+bibliography: references.bib
+title-block-style: plain
+jupyter: julia-1.9
+date: 2024-01-13
+execute: 
+  eval: false
+format: 
+  html:
+    self-contained: true
+    code-fold: true
+    code-tools: true
+---
+
+While browsing Wikipedia for random bits of mathematical knowledge, I stumbled across the the [article](https://en.wikipedia.org/wiki/Korteweg%E2%80%93De_Vries_equation) on Korteveg-De Vries equation (hereafter abbreviated as KdV-equation) with this [gif](https://en.wikipedia.org/wiki/Korteweg%E2%80%93De_Vries_equation#/media/File:KdV_equation.gif). It shows the evolution of a cosine wave through time and the caption claims, that it was computed using the Zabusky-Kruskal-scheme. I had never heard of it, until I read the article. So I decided to take some time to write a blog post about it.
+
+## The Korteveg-De Vries-equation
+
+The KdV-equation is a nonlinear partial differential equation given by
+
+$$
+u_t + u_{xxx} + 6uu_x = 0
+$$ {#eq-01}
+
+in $\mathbb{R} \times (0, \infty)$. By the subscripts we denote the temporal and spatial partial derivatives. For further computations we sightly generalize the KdV-equation to
+
+$$
+\alpha u_t + \beta u_{xxx} + \gamma u u_x = 0
+$$ {#eq-02}
+
+for the real numbers \$\alpha, \beta, \gamma\$. The Wikipedia article mentions the Zabusky-Kruskal scheme (ZKS) as the method which is used. The ZKS is a finite difference scheme on a two dimensional Cartesian grid. So we look up in the original article @Zabusky1965 and adapt the mentioned scheme to our setting and rearrange the terms. This leads to
+
+$$
+0 = \alpha (\frac{u_i^{j+1} - u_i^{j-1}}{2\Delta t}) + \beta (\frac{- u_{i-2}^j + 2u_{i-1}^j - 2u_{i+1}^j + u_{i+2}^j}{2 \Delta x^3}) + \frac{\gamma}{3}(u_{i-1}^j + u_i^j + u_{i+1}^j)\frac{u_{i+1}^j - u_{i-1}^j}{2\Delta x}.
+$$ {#eq-03}
+
+Here we denote by $u_i^j = u(i\Delta x, j \Delta t)$ the value at the grid point for the function $u(x,t)$. The ZKS is an explicit scheme in time, which needs two time epochs to calculate the next step. To use it, we have to make a step backwards in time with an implicit approximation of the time derivative before we do the first step. Furthermore the ZKS uses periodic boundary conditions for setting appropriate boundary conditions of an unbounded domain.
+
+# A soliton solution
+
+The KdV-equation is an exceptional nonlinear partial differential equation, since for certain values, it can be solved explicitly. In this section we follow @Evans2010 (p. 178f.) and use specific values for $\alpha$, \beta, \\gamma\$
+
+The equation we will solve is
+
+$$
+u_t + 6uu_x + u_{xxx} = 0
+$$ {#eq-04}
+
+on $\mathbb{R} \times (0, \infty)$ and we are looking for solutions of the type:
+
+$$
+u(x,t) = v(x -\sigma t).
+$$
+
+Therefore we are looking for solutions which "carry forward" the initial position. The idea to look for solutions of this type comes from observing the nature. The KdV-Equation describes solitary waves in shallow water. To get a picture of a solitary wave, you can watch[ this video](https://yt.artemislena.eu/watch?v=w-oDnvbV8mY&listen=false).
+
+If we compute the derivative of $v = v(s)$ and insert it in @eq-03 we get:
+
+$$
+-\sigma v' + 6vv' +v''' = 0.
+$$
+
+This is an ODE and we want to solve it explicitly. At first we integrate the equation with respect to $s$ and obtain
+
+$$
+-\sigma v + 3v^2 + v'' = a
+$$
+
+for $a \in \mathbb{R}$. The next step is to multiply the equation with $v'$ which is a not reversible step. Therefore we need to test our computed solution, if it is truly a solution of the KdV-equation. After the multiplication we get
+
+$$
+-\sigma vv' + 3v^2v' + v''v' = av',
+$$
+
+and integration with respect to $v = v(s)$ yields
+
+$$
+\frac{(v')²}{2} = av + b +\frac{\sigma}{2}v^2 - v^3v'.
+$$
+
+To determine the constants of integration $a, b$ we look once again at our observed solitary wave. The wave is localized in a small spatial region and a reasonable assumption of our solution should be then
+
+$$
+\lim_{s\to\pm\infty} v(s) = \lim_{s\to\pm\infty} v'(s) = \lim_{s\to\pm\infty} v''(s) = 0.
+$$
+
+Since \$a = -\sigma v + 3v\^2 + v'' \$ for all $s\in \mathbb{R}$ is a constant, we deduce that $a = 0$. Otherwise we could find $\hat{s} \in \mathbb{R}$ such that $$
+0 \leq -\sigma v + 3v^2 + v'' < a / 2
+$$ for all $s \geq \hat{s}$, which is a contradiction to $a \neq 0$. The same reasoning can be applied to the integration constant $b$ and we deduce $b = 0$. Thus we get
+
+$$
+(v')^2 = v^2(\sigma -2v)
+$$
+
+and taking the square root we arrive at
+
+$$
+v' = \pm v\sqrt{\sigma - 2v}.
+$$
+
+This is a separable ODE and we hope we can solve it. However the integral is not solved in the usual way with the $\operatorname{atanh}$ function, but rather with a substitution you wouldn't think of. The integral representation of the ODE is
+
+$$
+s = - \int_1^{v(s)} \frac{dz}{z\sqrt{z(\sigma - 2z)}} + c.
+$$
+
+The substitution \$z = \\frac{\\sigma}{2} \operatorname{sech}\^2 \theta\$ gives the solution
+
+$$
+v(s) = \frac{\sigma}{2}\operatorname{sech}^2\left(\frac{\sqrt{\sigma}}{2}(s - c)\right)
+$$
+
+and thus we finally arrive at
+
+$$
+u(x,t) = v(x-\sigma t) = \frac{\sigma}{2}\operatorname{sech}^2\left(\frac{\sqrt{\sigma}}{2}(x - \sigma t - c)\right).
+$$ {#eq-05} Now we have to check our solution @eq-05 by inserting it into @eq-04.
+
+We abbreviate $A = \frac{\sqrt{\sigma}}{2}(x - \sigma t)$ and start calculating:
+
+$$
+u_t + u_{xxx} + 6uu_x = \frac{\partial}{\partial t}(\frac{\sigma}{2} \operatorname{sech}^2(A)) + \frac{\sigma}{2}\frac{\partial^3}{\partial x^3} \operatorname{sech}^2(A) + \frac{6\sigma^2}{4}\operatorname{sech}(A)\cdot \frac{\partial}{\partial x}\operatorname{sech}(A) \newline
+= \sigma^{5/2}\left(\operatorname{tanh}(A)\operatorname{sech}^2(A) + \operatorname{tanh}(A)\operatorname{sech}^4(A) - \frac{1}{2}\operatorname{tanh}^3(A)\operatorname{sech}^2(A) - \frac{3}{2}\operatorname{tanh}(A)\operatorname{sech}^4(A) \right) \newline
+= \frac{\sigma^{5/2}}{2\operatorname{cosh}^5(A)}\left((\operatorname{cosh}^2(A) - 1)\operatorname{sinh}(A) - \operatorname{sinh}^3(A) \right) \newline = 0.
+$$
+
+# Julia implementation
+
+The ZKS is an explicit scheme and usually not every time step size is possible. If the time step is too large numerical instabilities can occur. This can be seen by observing an amplitude that steadily increases until it reaches infinity. The original paper from @Zabusky1965 does not give any information about stability issues, but rather other interesting properties. In fact, the ZKS is only mentioned in a footnote and a citation is given to private correspondence! Those were different times back then...
+
+The article from @Taha1984 gives an overview of different solution techniques for the KdV-equation, and the ZKS is only one of many methods. This article gives as a stability criterion the condition:
+
+$$
+\frac{\Delta t}{\Delta x}\left| -2u_0 + \frac{1}{\Delta x^2}\right| \leq \frac{2}{3\sqrt{3}}.
+$$
+
+However this given only for the coefficients $\alpha = \beta = 1$ and $\gamma = 6$ and no reasoning why it should be true. Since @eq-01 is highly nonlinear, traditional methods for the numerical stability can not be used directly. If I have more time to prepare this blog post, I would love to find out the stability criterion of @eq-01 by myself.
+
+```{r}
+#| label: fig-timestep
+#| fig-cap: "Required time step for given spatial resolution and u0 = 1.0"
+#| eval: true
+#| code-fold: true
+
+# Code for generation of the time step graphics
+
+# Load libraries
+library(ggplot2)
+
+# function for computing an approximate time step
+compute_timestep <- function(dx, end_time, u0) {
+  dt <- end_time
+  numerical_stable <- FALSE
+  
+  while(!numerical_stable) {
+    dt <- 0.5 * dt
+    numerical_stable <- (dt / dx) * abs(-2 * u0 + (1 / dx)^2) <= 2 / (3*sqrt(3))
+  }
+  
+  return(dt)
+}
+
+# generate log scaled vector for plotting
+x <- c(1:9 %o% 10^(-8:-1))
+end_time <- 1.0
+u0 <- 1.0
+
+# compute the required time step
+y <- numeric(length(x))
+for (i in seq_along(x)) {
+  y[i] <- compute_timestep(x[i], end_time, u0)
+}
+
+df <- data.frame("dx" = x, "dt" = y)
+
+ggplot(df, aes(log10(dx), log10(dt))) + 
+  geom_line(color = "blue") +
+  annotation_logticks() +
+  theme_bw() +
+  labs(title = "Time step size required for stability of ZK-scheme") 
+```
+
+As we can see, the time step required for numerical stability decreases rapidly as the spatial resolution is refined. While experimenting with the required time step, I got memory errors because too many values had to be stored.
+
+The implementation is done in Julia. First, a mutable structure is defined to hold the coefficients and initial values of the KdV equation. An outer constructor is then used to build the arrays and compute an approximate time step.
+
+```{julia}
+
+# implement a structure for the problem
+mutable struct kdv_problem{F <: AbstractFloat}
+    alpha::F            # α in the equation
+    beta::F             # β in the equation
+    gamma::F            # γ in the equation
+
+    delta_x::F          # spatial resolution
+    delta_t::F          # time resolution
+
+    interval_length::F  # interval length of the base
+
+    T::F                # end time 
+
+    u::Matrix{F}        # array for the solution
+end
+
+# Outer constructor for automated sizing the array and initializing it with zeros
+"""
+    kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)
+
+Set up Korteweg-de Vries (KdV) equation with initial values and suitable parameters.
+Compute the time step automatically such that it is a stable scheme.
+
+# Arguments
+- `alpha::F`: Parameter for the equation.
+- `beta::F`: Parameter for the equation.
+- `gamma::F`: Parameter for the equation.
+- `delta_x::F`: Spatial resolution.
+- `T::F`: End time for the simulation.
+- `interval_length::F`: Length of the spatial interval.
+- `initial_values::Vector{F}`: Initial values for the simulation.
+- `delta_t`=Nothing: Time resolution, if `Nothing` then it calculates it using the criterion given by Taha1984.
+
+# Returns
+- `kdv_problem{F}`: An object representing the KdV problem with the specified parameters.
+
+# Example
+alpha = 1.0
+beta = 2.0
+gamma = 3.0
+delta_x = 0.01
+T = 5.0
+interval_length = 1.0
+initial_values = [sin(2 * π * x) for x in 0:delta_x:interval_length]
+
+kdv = kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)
+
+"""
+function kdv_problem(alpha::F, beta::F, gamma::F, delta_x::F, T::F, interval_length::F, initial_values::Vector{F}, delta_t::Union{F, Nothing} = Nothing) where F <: AbstractFloat
+    if T <= 0.0
+        error("Negative end time")
+    elseif interval_length <= 0.0
+        error("Negative interval length")
+    elseif delta_x <= 0.0
+        error("Negative spatial resolution")
+    end
+
+    if isnothing(delta_t)
+        delta_t = T
+        numerical_stable = false
+
+        # compute the time step
+        while !numerical_stable
+            delta_t = 0.5 * delta_t
+            numerical_stable = delta_t / delta_x * abs((- 2 * maximum(initial_values) + 1 / (delta_x^2))) <= 2 / (3 * sqrt(3))
+        end
+    end
+
+    # compute the dimensions of the matrix for storing values
+    N_x = ceil(Int64, interval_length / delta_x)
+    N_t = ceil(Int64, T / delta_t) + 1 # plus one for the implicit scheme at the beginning
+    u = zeros(F, N_x, N_t)
+    u[:, 2] .= initial_values # set the initial values
+    
+    return kdv_problem{F}(alpha, beta, gamma, delta_x, delta_t, interval_length, T, u)
+end
+```
+
+Furthermore we define the method `solve!` for the KdV-problem, which solves the problem using periodic boundary conditions. Since the ZKS requires values from the current step and the previous step, we approximate the previous step with an implicit scheme from the initial values before the first iteration. The idea of using an implicit time step for the first time step comes from @Taha1984.
+
+```{julia}
+"""
+    solve!(P::kdv_problem)
+
+Solve the Korteweg-de Vries (KdV) equation numerically using an explicit finite difference scheme.
+The Zabusky-Kruskal scheme with periodic boundary conditions is used.
+
+# Arguments
+- `P::kdv_problem`: KdV Equation with initial values.
+
+
+# Returns
+- `kdv_problem{F}`: An object representing the KdV problem with the specified parameters.
+
+# Example
+alpha = 1.0
+beta = 2.0
+gamma = 3.0
+delta_x = 0.01
+T = 5.0
+interval_length = 1.0
+initial_values = [sin(2 * π * x) for x in 0:delta_x:interval_length]
+
+kdv = kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)
+solve!(kdv)
+"""
+function solve!(P::kdv_problem)
+    N_x, N_t = size(P.u)
+
+    # use an implicit scheme to solve for the time - Δt, since two time steps 
+    # are necessary for the Zabusky-Kruskal scheme
+
+    for i in 0:N_x-1
+        # Calculate the indices according to the boundary conditions
+        in2 = mod(i + 2, N_x) + 1   # two indices to the right (next index)
+        in1 = mod(i + 1, N_x) + 1   # one index to the right (next index)
+        ip1 = mod(i - 1, N_x) + 1      # one index before, (to the left)
+        ip2 = mod(i - 2, N_x) + 1      # two indices before, (to the left)
+        k = i + 1
+
+        dispersion = P.beta * ( -P.u[ip2, 2] + 2 * P.u[ip1, 2] - 2 * P.u[in1, 2] + P.u[in2, 2]) / (2 * P.delta_x^3)
+        advection = (P.gamma / 3) * (P.u[ip1, 2] + P.u[k, 2] + P.u[in1, 2]) * ((P.u[in1, 2] - P.u[ip1, 2]) / (2 * P.delta_x))
+        P.u[k, 1] = P.u[k, 2] + (P.delta_t / P.alpha) * (dispersion + advection)
+        
+    end
+
+    # now apply the ZK-scheme since the initial values and the values at -Δt
+    # are known
+
+    for j in 3:N_t
+        for i in 0:N_x-1
+        # Calculate the indices according to the boundary conditions
+            in2 = mod(i + 2, N_x) + 1   # two indices to the right (next index)
+            in1 = mod(i + 1, N_x) + 1   # one index to the right (next index)
+            ip1 = mod(i - 1, N_x) + 1      # one index before, (to the left)
+            ip2 = mod(i - 2, N_x) + 1      # two indices before, (to the left)
+            k = i + 1
+
+            dispersion = P.beta * ( -P.u[ip2, j-1] + 2 * P.u[ip1, j-1] - 2 * P.u[in1, j-1] + P.u[in2, j-1]) / (2 * P.delta_x^3)
+            advection = (P.gamma / 3) * (P.u[ip1, j-1] + P.u[k, j-1] + P.u[in1, j-1]) * ((P.u[in1, j-1] - P.u[ip1, j-1]) / (2 * P.delta_x))
+            P.u[k, j] = P.u[k, j - 2] - (2 * P.delta_t / P.alpha) * (dispersion + advection)
+        end
+    end
+end
+```
+
+# Testing with the soliton solution
+
+Since we have an analytic solution at hand, we can test our implementation against it. We have a free parameter $\sigma$, which we set $\sigma = 1$. While trying to show the convergence in various norms (1-, 2-norm and the infinity norm) I noticed the following things:
+
+-   The solitary wave must be completely contained within the boundary, otherwise the values are rubbish.
+
+-   I notice a very fast convergence, but after a certain point, the error does not get any smaller.
+
+However, we can see the convergence and thus verify that our implementation works. Below is the `Julia`\` function for testing the ZKS.
+
+```{julia}
+
+"""
+test_ZK_scheme()
+
+Test the Zk-scheme for the solution
+
+u(x,t) = 0.5 * sech(0.5 * (x - t) - 4.0)^2
+
+for the KdV equation
+    0 = 1.0 * u_t + 1.0 * u_xxx + 6.0 * u_x * u 
+"""
+function test_ZK_scheme()
+    σ = 1.0
+    start_point  = 0.0
+    end_point = 20
+    interval_length = end_point - start_point
+    end_time = 0.2
+    exact_sol(x,t) = 0.5 * σ * sech(sqrt(σ) * 0.5 * (x - σ*t) -4.0)^2
+    inital_values(x) = exact_sol(x, 0.0)
+
+    for k in 0:6
+        # Set up the problem
+        dx = 0.5^k
+        x = collect(range(start_point, end_point, step= dx))
+        initial_values = inital_values.(x)
+        P = kdv_problem(1.0, 1.0, 6.0, dx, end_time, interval_length, initial_values)
+        
+        # solve the Problem
+        solve!(P)
+        
+        # Compute the error
+        dt = P.delta_t
+        approximate_solution = P.u[:, end]
+        exact_solution = exact_sol.(x, end_time)
+        err_vec = abs.(exact_solution - approximate_solution)
+        # compute the error norms
+        err_inf_norm = maximum(err_vec)
+        err_1_norm = trapezoidal_rule(x, err_vec)
+        err_2_norm = sqrt(trapezoidal_rule(x, err_vec .* err_vec))
+        println("+"^80)
+        println("k = $k")
+        @printf "dx = %.3e\n" dx
+        @printf "dt = %.3e\n" dt
+        @printf "error_inf_norm = %.3e \n" err_inf_norm
+        @printf "error_1_norm = %.3e \n" err_1_norm
+        @printf "error_2_norm = %.3e \n" err_2_norm
+    end
+    
+end
+
+"""
+    trapezoidal_rule(x, y)
+
+Compute the numerical approximation of the definite integral using the trapezoidal rule.
+
+# Arguments
+- `x::Vector`: Vector of sample points representing the independent variable.
+- `y::Vector`: Vector of function values corresponding to each sample point.
+
+# Output
+- Returns the numerical approximation of the definite integral using the trapezoidal rule.
+
+# Examples
+x_values = [0.0, 0.1, 0.2, 0.3, 0.4]
+y_values = [f(x) for x in x_values]  # Replace f(x) with your function
+result = trapezoidal_rule(x_values, y_values)
+println("Trapezoidal Rule Integral: ", result)
+"""
+function trapezoidal_rule(x, y)
+    h = diff(x)
+    return sum((y[1:end-1] + y[2:end]) .* h) * 0.5
+end
+```
+
+# The conservation of integrals
+
+One of the most intriguing properties of the KdV-equation is the conservation of infinitely many quantities which is shown in the article @Miura1968. The article *Korteveg-de Vrie Eequation* of Alper Korkmaz in @Encyclopedia2015 lists the first quantities which are conserved by the KdV-equation, namely
+
+$$
+C_1 = \int_{-\infty}^\infty u\; dx \qquad \text{and} \\ C_2 = \int_{-\infty}^\infty u^2\; dx.
+$$
+
+We can compute these conserved quantities by approximating the integrals using the trapezoidal rule and show that those are indeed conserved numerically up to a certain degree.
+
+```{julia}
+function show_conservation()
+    # set up the KdV Equation and solve it
+    σ = 1.0
+    start_point  = 0.0
+    end_point = 20
+    interval_length = end_point - start_point
+    end_time = 0.2
+    exact_sol(x,t) = 0.5 * σ * sech(sqrt(σ) * 0.5 * (x - σ*t) -4.0)^2
+    inital_values(x) = exact_sol(x, 0.0)
+
+    dx = 0.5^4
+    x = collect(range(start_point, end_point, step= dx))
+    initial_values = inital_values.(x)
+    P = kdv_problem(1.0, 1.0, 6.0, dx, end_time, interval_length, initial_values)
+    
+    # solve the Problem
+    solve!(P)
+
+    # extract the values and compute the conserved values
+    u = P.u
+    u2 = u .* u
+
+    c1 = mapslices(a -> trapezoidal_rule(x, a), u, dims =1)
+    c2 = mapslices(a -> trapezoidal_rule(x, a), u2, dims = 1)
+    diff_c1 = maximum(c1) - minimum(c1)
+    diff_c2 = maximum(c2) - minimum(c2)
+
+    @printf "First two conserved quantities of the KdV-Equation:"
+    @printf "c1 ≈ %.8e \n" sum(c1) / length(c1)
+    @printf "Maximal difference observed: %.3e\n" diff_c1
+    @printf "\n"
+    @printf "c1 ≈ %.8e \n" sum(c2) / length(c2)
+    @printf "Maximal difference observed: %.3e\n" diff_c2
+    
+    
+end
+
+show_conservation()
+```

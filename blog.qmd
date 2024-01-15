@@ -5,6 +5,5 @@ listing:
   contents: blog_posts
   type: grid
 ---
-On this blog I write about different methodologies on working with data and
-computation. Personally I'm not so interested in the results, but rather the way
-they are obtained. 
+
+On this blog I write about different methodologies on working with data and computation. Personally I'm not so interested in the results, but rather the way they are obtained.
