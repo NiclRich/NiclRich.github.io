@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Niclas">
-<meta name="dcterms.date" content="2023-09-01">
+<meta name="dcterms.date" content="2024-03-09">
 
-<title>A curious mathematician - The answer to an ever repeating question</title>
+<title>A curious mathematician - Solving SAT using Integer Programming</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -139,14 +159,25 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#constraint-satisfactions-problems-csp" id="toc-constraint-satisfactions-problems-csp" class="nav-link" data-scroll-target="#constraint-satisfactions-problems-csp">Constraint Satisfactions Problems (CSP)</a></li>
+  <li><a href="#integer-linear-programming" id="toc-integer-linear-programming" class="nav-link" data-scroll-target="#integer-linear-programming">Integer Linear Programming</a></li>
+  </ul></li>
+  <li><a href="#ilp-formulation-of-sat" id="toc-ilp-formulation-of-sat" class="nav-link" data-scroll-target="#ilp-formulation-of-sat">ILP-formulation of SAT</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The answer to an ever repeating question</h1>
+<h1 class="title">Solving SAT using Integer Programming</h1>
 </div>
 
 
@@ -163,7 +194,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 1, 2023</p>
+      <p class="date">March 9, 2024</p>
     </div>
   </div>
   
@@ -175,11 +206,70 @@ window.Quarto = {
 </header>
 
 
-<p>Everyone who studies math or has studied math in the past, has heard the question <span class="math inline">\(\aleph_0\)</span>-times: “What are you going to do with a degree in math?”. I gave an presentation about it in a German school in Berlin. The slides and the handout (in German) can be found here:</p>
-<p><a href="https://github.com/NiclRich/blog/blob/main/other/presentation_berlin_2023-09-01/Handout-OS_Ernst_Haeckel_Berlin_20230901.pdf">Handout</a></p>
-<p><a href="https://github.com/NiclRich/blog/blob/main/other/presentation_berlin_2023-09-01/Slides-OS_Ernst_Haeckel_Berlin_20230901.pdf">Slides</a></p>
+<section id="introduction" class="level1 page-columns page-full">
+<h1>Introduction</h1>
+<p>The fact that the Boolean satisfiability problem can be solved using integer programming techniques is known to me for quite some time. However I have rarely read about it and so I thought, I should write a blog post about it.</p>
+<section id="constraint-satisfactions-problems-csp" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="constraint-satisfactions-problems-csp">Constraint Satisfactions Problems (CSP)</h2>
+<p>Let’s start with the definition of a <em>Constraint Satisfaction Problem</em>. Each CSP consists of three sets, a finite set of variables <span class="math inline">\(X = (X_1, \dots, X_n)\)</span>, a set of domains for each variable, commonly reffered as <span class="math inline">\(D = (D_1, \dots D_n)\)</span>, and a set of constraints <span class="math inline">\(C = (C_1, \dots, C_m)\)</span>. Each constraint <span class="math inline">\(C_i\)</span> is a relation on the Cartesian product of a subset on the domains.</p>
+<p>An <em>instantiation</em> is the assignment of a value to each variable from its respective domain. An instantiation satisfies a constraint <span class="math inline">\(C_i\)</span> iff the values of the variables of the constraint are in the relation of <span class="math inline">\(C_i\)</span>, see [<span class="citation" data-cites="Dechter2003">Dechter (<a href="#ref-Dechter2003" role="doc-biblioref">2003</a>)</span>].</p>
+<div class="no-row-height column-margin column-container"><div id="ref-Dechter2003" class="csl-entry" role="listitem">
+Dechter, Rina. 2003. <em>Constraint Processing</em>. Amsterdam, Holland:Elsevier Inc.
+</div></div><p>The problem is now to determine whether there exists an instantiation that satisfies all constraints, and this problem is generally NP-hard.</p>
+<p>An important special case of CSPs is the <em>Boolean Satisfiability Problem (SAT)</em>, which is a CSP with Boolean constraints. The importance of this problem stems from the <a href="https://en.wikipedia.org/wiki/Cook%E2%80%93Levin_theorem">Cook-Levin theorem</a>, which states that it is NP-complete, i.e.&nbsp;we can reduce any NP-hard problem to this problem in polynomial time. Each variable in SAT has the domain <span class="math inline">\(\{True, False \}\)</span> and the constraints are formulated using the logical operators <span class="math inline">\(\land\)</span> (AND), <span class="math inline">\(\lor\)</span> (OR), and <span class="math inline">\(\lnot\)</span> (NOT). There are many ways to express logical equivalent formulas, but there are two distinctive normal forms, which that are often used:</p>
+<ul>
+<li><p><a href="https://en.wikipedia.org/wiki/Disjunctive_normal_form">Disjunctive normal form</a> (DNF),</p></li>
+<li><p>Conjunctive normal form (CNF).</p></li>
+</ul>
+<p>We will focus on the later one. Propositional <em>literals</em> are variables and their negations, e.g.&nbsp;<span class="math inline">\(x\)</span> and <span class="math inline">\(\lnot x\)</span>. <em>Clauses</em> are disjunctions of literals - or in simple words - connecting variables or their negation with OR. It is possible to write all logical formulas in CNF (or DNF) using the algebraic properties of the Boolean algebra or truth tables (difficult for not tiny formulas).</p>
+<p>For example the following formulas are in CNF:</p>
+<p><span class="math display">\[
+(A \lor \lnot B \lor C \lor D) \land (B \lor \lnot C),\\
+(\lnot A \lor \lnot D) \land (B\lor C).
+\]</span></p>
+<p>Until today, I did not know that the CNF can be <a href="https://en.wikipedia.org/wiki/Conjunctive_normal_form">formulated with a context-free grammar</a>. Well, I learned something too, while writing this blog post.</p>
+</section>
+<section id="integer-linear-programming" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="integer-linear-programming">Integer Linear Programming</h2>
+<p>We will give a brief introduction of linear programming, which is needed to formulate the SAT problem as an optimization problem. This approach roughly follows <span class="citation" data-cites="Pedregal2004">(<a href="#ref-Pedregal2004" role="doc-biblioref">Pedregal 2004</a>)</span> Linear programming is the optimization of a linear function with linear constraints, i.e.&nbsp;we have a linear function <span class="math inline">\(c: \mathbb{R}^n \to \mathbb{R}, \;c(x) = \sum_i c_i x_i\)</span> and the <span class="math inline">\(m\)</span> constraints are</p>
+<div class="no-row-height column-margin column-container"></div><p><span class="math display">\[
+\sum_i a_{ji} x_i \leq b_j \qquad \text{with} \quad 1 \leq j \leq m.
+\]</span></p>
+<p>Inequalities with <span class="math inline">\(\geq\)</span> can be reduced to above form by multiplication with <span class="math inline">\(-1\)</span>. In the literature the inequalities are used componentwise, so <span class="math inline">\(x \geq 0\)</span> means that each entry of <span class="math inline">\(x\)</span> is greater equal to <span class="math inline">\(0\)</span>. This results in the compact notation</p>
+<p><span class="math display">\[
+\min c(x)
+\]</span></p>
+<p>subject to</p>
+<p><span class="math display">\[
+Ax \leq b, \qquad x \geq 0
+\]</span></p>
+<p>where $A ^{mn} $ and <span class="math inline">\(b \in \mathbb{R}^m\)</span>. The assumption <span class="math inline">\(x \geq 0\)</span> is not a loss of generality, because considering positive and negative part of <span class="math inline">\(x\)</span> can be substituted for <span class="math inline">\(x\)</span> itself. In <span class="math inline">\(\mathbb{R}^n\)</span> the inequalities describe a convex polytope, which is then used heavily in the theory of solvers. Commonly used algorithms to solve the problem are the simplex method and interior point methods <span class="citation" data-cites="Nocedal2006">(<a href="#ref-Nocedal2006" role="doc-biblioref">Nocedal and Wright 2006</a>)</span>. The simplex method which is described well in <span class="citation" data-cites="Pedregal2004">(<a href="#ref-Pedregal2004" role="doc-biblioref">Pedregal 2004</a>)</span> works in two steps:</p>
+<div class="no-row-height column-margin column-container"><div id="ref-Nocedal2006" class="csl-entry" role="listitem">
+Nocedal, Jorge, and Stephen J. Wright. 2006. <em>Numerical Optimization</em>. 2nd ed. Springer Ser. Oper. Res. Financ. Eng. New York, NY: Springer.
+</div></div><ol type="1">
+<li>Find a feasible point.</li>
+<li>Search along the facets of the polytope for an optimal solution.</li>
+</ol>
+<p>So far, the variables are continuous and the problem is easy to solve. However if our variables need to be integer, everything changes and the problem becomes NP-hard. These problems are called integer linear programming (ILP). We will focus on binary variables, i.e.&nbsp;<span class="math inline">\(x \in \{0, 1 \}\)</span>, to model our SAT problem. One approach which is commonly used for integer programming is the branch-and-bound method. This method is related to backtracking by successively decomposing the integer problem into subproblems which are then relaxed to continuous problems. Each of these subproblems is solved individually and they provide a bound for the integer problem, if a feasible point has already been found. A more detailed approach can be found in [<span class="citation" data-cites="Pedregal2004">Pedregal (<a href="#ref-Pedregal2004" role="doc-biblioref">2004</a>)</span>].</p>
+<div class="no-row-height column-margin column-container"><div id="ref-Pedregal2004" class="csl-entry" role="listitem">
+Pedregal, Pablo. 2004. <em>Introduction to Optimization.</em> Vol. 46. Texts Appl. Math. New York, NY: Springer.
+</div></div></section>
+</section>
+<section id="ilp-formulation-of-sat" class="level1">
+<h1>ILP-formulation of SAT</h1>
+<p>Now we have everything we need to translate SAT into ILP. The key observation is that a feasible point must satisfy <em>all</em> constraints at the once, which is the AND logical operator. If we can formulate a constraint for each clause in the CNF, then we are done.</p>
+<p>Let <span class="math inline">\(\phi\)</span> be a logical statement in CNF with the variables <span class="math inline">\(z_i\)</span> and <span class="math inline">\(\psi\)</span> be a clause of <span class="math inline">\(\phi\)</span>. Each non-negated literal corresponds to the ILP variable <span class="math inline">\(x_i\)</span> and each negated literal correspons to the term <span class="math inline">\(1 - x_i\)</span>. Since the literals are connected by disjunctions, at least one of them must be true. Thus we add up the terms generated by the literals up and it has to be greater than or equal to <span class="math inline">\(1\)</span>.</p>
+<p><em>Example</em>: Given the logical statement <span class="math inline">\(z_1 \land (z_2 \lor \lnot z_3)\)</span> yields two inequalities, namely:</p>
+<p><span class="math display">\[
+x_1 \geq 1, \\
+x_2 + 1-x_3 \geq 1.
+\]</span></p>
+<p>Now you might ask, what function should we optimize? Well it is easy, <span class="math inline">\(c(x) = 0\)</span>. With this function, every feasible solution is a minimum, and modern solvers stop after finding a solution.</p>
+<p>In this way, we can solve Sudoku with linear programming. Sudoku is probably the most famous CSP, that can now be solved in a quite extraordinary way. But the formulation of Sudoku in CNF is not necessary and it can be <a href="https://jump.dev/JuMP.jl/stable/tutorials/linear/sudoku/">directly implemented</a>.</p>
 
 
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

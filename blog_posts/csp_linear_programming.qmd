@@ -1,0 +1,83 @@
+---
+title: "Solving SAT using Integer Programming"
+author: "Niclas"
+page-navigation: true
+back-to-top-navigation: true
+date: 2024-03-12
+reference-location: margin
+citation-location: margin
+bibliography: references.bib
+---
+
+# Introduction
+
+The fact that the Boolean satisfiability problem can be solved using integer programming techniques is known to me for quite some time. However I have rarely read about it and so I thought, I should write a blog post about it.
+
+## Constraint Satisfactions Problems (CSP)
+
+Let's start with the definition of a *Constraint Satisfaction Problem*. Each CSP consists of three sets, a finite set of variables $X = (X_1, \dots, X_n)$, a set of domains for each variable, commonly reffered as $D = (D_1, \dots D_n)$, and a set of constraints $C = (C_1, \dots, C_m)$. Each constraint $C_i$ is a relation on the Cartesian product of a subset on the domains.
+
+An *instantiation* is the assignment of a value to each variable from its respective domain. An instantiation satisfies a constraint $C_i$ iff the values of the variables of the constraint are in the relation of $C_i$, see \[@Dechter2003\].
+
+The problem is now to determine whether there exists an instantiation that satisfies all constraints, and this problem is generally NP-hard.
+
+An important special case of CSPs is the *Boolean Satisfiability Problem (SAT)*, which is a CSP with Boolean constraints. The importance of this problem stems from the [Cook-Levin theorem](https://en.wikipedia.org/wiki/Cook%E2%80%93Levin_theorem), which states that it is NP-complete, i.e. we can reduce any NP-hard problem to this problem in polynomial time. Each variable in SAT has the domain $\{True, False \}$ and the constraints are formulated using the logical operators $\land$ (AND), $\lor$ (OR), and $\lnot$ (NOT). There are many ways to express logical equivalent formulas, but there are two distinctive normal forms, which that are often used:
+
+-   [Disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF),
+
+-   Conjunctive normal form (CNF).
+
+We will focus on the later one. Propositional *literals* are variables and their negations, e.g. $x$ and $\lnot x$. *Clauses* are disjunctions of literals - or in simple words - connecting variables or their negation with OR. It is possible to write all logical formulas in CNF (or DNF) using the algebraic properties of the Boolean algebra or truth tables (difficult for not tiny formulas).
+
+For example the following formulas are in CNF:
+
+$$
+(A \lor \lnot B \lor C \lor D) \land (B \lor \lnot C),\\
+(\lnot A \lor \lnot D) \land (B\lor C).
+$$
+
+Until today, I did not know that the CNF can be [formulated with a context-free grammar](https://en.wikipedia.org/wiki/Conjunctive_normal_form). Well, I learned something too, while writing this blog post.
+
+## Integer Linear Programming
+
+We will give a brief introduction of linear programming, which is needed to formulate the SAT problem as an optimization problem. This approach roughly follows [@Pedregal2004] Linear programming is the optimization of a linear function with linear constraints, i.e. we have a linear function $c: \mathbb{R}^n \to \mathbb{R}, \;c(x) = \sum_i c_i x_i$ and the $m$ constraints are
+
+$$
+\sum_i a_{ji} x_i \leq b_j \qquad \text{with} \quad 1 \leq j \leq m.
+$$
+
+Inequalities with $\geq$ can be reduced to above form by multiplication with $-1$. In the literature the inequalities are used componentwise, so $x \geq 0$ means that each entry of $x$ is greater equal to $0$. This results in the compact notation
+
+$$
+\min c(x)
+$$
+
+subject to
+
+$$
+Ax \leq b, \qquad x \geq 0
+$$
+
+where \$A \in \mathbb{R}\^{m\times n} \$ and $b \in \mathbb{R}^m$. The assumption $x \geq 0$ is not a loss of generality, because considering positive and negative part of $x$ can be substituted for $x$ itself. In $\mathbb{R}^n$ the inequalities describe a convex polytope, which is then used heavily in the theory of solvers. Commonly used algorithms to solve the problem are the simplex method and interior point methods [@Nocedal2006]. The simplex method which is described well in [@Pedregal2004] works in two steps:
+
+1.  Find a feasible point.
+2.  Search along the facets of the polytope for an optimal solution.
+
+So far, the variables are continuous and the problem is easy to solve. However if our variables need to be integer, everything changes and the problem becomes NP-hard. These problems are called integer linear programming (ILP). We will focus on binary variables, i.e. $x \in \{0, 1 \}$, to model our SAT problem. One approach which is commonly used for integer programming is the branch-and-bound method. This method is related to backtracking by successively decomposing the integer problem into subproblems which are then relaxed to continuous problems. Each of these subproblems is solved individually and they provide a bound for the integer problem, if a feasible point has already been found. A more detailed approach can be found in \[@Pedregal2004\].
+
+# ILP-formulation of SAT
+
+Now we have everything we need to translate SAT into ILP. The key observation is that a feasible point must satisfy *all* constraints at the once, which is the AND logical operator. If we can formulate a constraint for each clause in the CNF, then we are done.
+
+Let $\phi$ be a logical statement in CNF with the variables $z_i$ and $\psi$ be a clause of $\phi$. Each non-negated literal corresponds to the ILP variable $x_i$ and each negated literal correspons to the term $1 - x_i$. Since the literals are connected by disjunctions, at least one of them must be true. Thus we add up the terms generated by the literals up and it has to be greater than or equal to $1$.
+
+*Example*: Given the logical statement $z_1 \land (z_2 \lor \lnot z_3)$ yields two inequalities, namely:
+
+$$
+x_1 \geq 1, \\
+x_2 + 1-x_3 \geq 1.
+$$
+
+Now you might ask, what function should we optimize? Well it is easy, $c(x) = 0$. With this function, every feasible solution is a minimum, and modern solvers stop after finding a solution.
+
+In this way, we can solve Sudoku with linear programming. Sudoku is probably the most famous CSP, that can now be solved in a quite extraordinary way. But the formulation of Sudoku in CNF is not necessary and it can be [directly implemented](https://jump.dev/JuMP.jl/stable/tutorials/linear/sudoku/).

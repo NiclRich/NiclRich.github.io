@@ -56,7 +56,7 @@ $$
 u(x,t) = v(x -\sigma t).
 $$
 
-Therefore we are looking for solutions which "carry forward" the initial position. The idea to look for solutions of this type comes from observing the nature. The KdV-Equation describes solitary waves in shallow water. To get a picture of a solitary wave, you can watch[ this video](https://yt.artemislena.eu/watch?v=w-oDnvbV8mY&listen=false).
+Therefore we are looking for solutions which "carry forward" the initial position. The idea to look for solutions of this type comes from observing the nature. The KdV-Equation describes solitary waves in shallow water. To get a picture of a solitary wave, you can watch[this video](https://yt.artemislena.eu/watch?v=w-oDnvbV8mY&listen=false).
 
 If we compute the derivative of $v = v(s)$ and insert it in @eq-03 we get:
 

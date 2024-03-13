@@ -8,11 +8,16 @@ about:
     - icon: github
       text: Github
       href: https://github.com/NiclRich
+    - icon: mail
+      text: E-Mail
+      href: mailto:info@niclasrichter.de
 ---
 
 # Bio
 
-My name is Niclas Richter, a mathematician by training, currently working as a Data Expert in the field of official statistics. I am passionate about exploring computational methods and utilizing quantitative approaches to solve diverse problems, with expertise in Julia, R, and Python. Generally, I am an inquisitive person, which is why I've named this website *'A Curious Mathematician'*.
+My name is Niclas Richter, a mathematician in training. After my undergraduate degree I have worked as a Data Expert in the field of official statistics. Currently going back to university for graduate studies.
+
+I am passionate about exploring computational methods and utilizing quantitative approaches to solve diverse problems, with expertise in Julia, R, and Python. Generally, I am an inquisitive person, which is why I've named this website *'A Curious Mathematician'*.
 
 I hold a degree (B.Sc.) in Mathematics after studying at TU Dresden and the Hebrew University of Jerusalem.
 

@@ -1,7 +1,7 @@
 ---
 title: "The answer to an ever repeating question"
 author: "Niclas"
-date: 2020-09-01
+date: 2023-09-01
 ---
 
 Everyone who studies math or has studied math in the past, has heard the question $\aleph_0$-times: "What are you going to do with a degree in math?". I gave an presentation about it in a German school in Berlin. The slides and the handout (in German) can be found here:

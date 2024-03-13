@@ -4,6 +4,7 @@ author: "Niclas"
 page-navigation: true
 back-to-top-navigation: true
 date: 2023-07-14
+bibliography: references.bib
 ---
 
 # How to solve a zero sum game using linear programming
