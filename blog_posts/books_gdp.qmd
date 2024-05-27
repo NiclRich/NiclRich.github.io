@@ -1,0 +1,133 @@
+---
+title: "Correlation between books and economic performance"
+author: "Niclas"
+date: 2024-05-27
+execute: 
+  warning: false
+reference-location: margin
+citation-location: margin
+bibliography: references.bib
+title-block-style: plain
+format: 
+  html:
+    self-contained: true
+    code-fold: true
+    code-tools: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+My dear friend Tobias asked the questions, how the books per capita
+influence the economic performance of one country. This question is not
+precise and does not imply any causality, but merely an interesting
+correlation.
+
+# Getting the data
+
+Before we compute anything, we need to get our hands on some data. We
+can not say anything about the number of physical books in any country,
+since nobody is counting them in all households and there are various
+ways to acquire books. However we can find data about the number of
+books published in a country within a single year. The website
+[worldpopulationreview.com](https://worldpopulationreview.com/country-rankings/books-published-per-year-by-country)
+offers data about some countries in some years. This list is neither
+complete nor with only recent data. But it's the best we have.
+
+The World Bank has data for the
+[population](https://data.worldbank.org/indicator/SP.POP.TOTL?view=chart)
+by years and the [GDP with Purchasing Power Parity per
+capita](https://data.worldbank.org/indicator/NY.GDP.PCAP.PP.KD?view=chart).
+I choose the GDP with Purchasing Power Parity in order to compare
+different purchasing powers in different countries. The GDP PPP is given
+in constant 2017 US-Dollar, so it's already without inflation.
+
+# Visualize the data
+
+We have to link our different data to compare and visualize it. But
+before we do some data cleaning and compute the number of published
+books by 100k, in order to standardize it. Since not every country has
+published data, we only have $104$ data points.
+
+```{r}
+#| eval: true
+#| warning: false
+#| code-fold: true
+
+library(tidyverse)
+
+population <- read_csv("~/R/books-vs-gdp/population.csv")
+GDP_captia_PPP <- read_csv("~/R/books-vs-gdp/GDP_captia_PPP.csv")
+books_published_per_year_by_country_2024 <- read_csv("~/R/books-vs-gdp/books-published-per-year-by-country-2024.csv", 
+                                                     col_types = cols(BooksPublishedPerYearAdditionalNotes = col_skip()))
+
+population <- population %>%
+  select(-where(is.logical)) %>%
+  select(-'Country Code', -'Indicator Code', - 'Indicator Name') %>%
+  rename("country" = 'Country Name') %>%
+  pivot_longer(cols = where(is.numeric), names_to = "year", values_to = "population") %>%
+  mutate(year = as.character(year)) 
+
+GDP_captia_PPP <- GDP_captia_PPP %>%
+  select(-where(is.logical)) %>%
+  select(-'Country Code', -'Indicator Code', - 'Indicator Name') %>%
+  rename("country" = 'Country Name') %>%
+  pivot_longer(cols = where(is.numeric), names_to = "year", values_to = "GDP_PPP") %>%
+  mutate(year = as.character(year))
+
+books_vs_gdp <- population %>%
+  inner_join(GDP_captia_PPP, by = c("country", "year")) %>%
+  inner_join(books_published_per_year_by_country_2024, by=c("country" = "country", "year" = "BooksPublishedPerYearDataYear")) %>%
+  filter(!is.na(GDP_PPP)) %>%
+  rename("books_published" = "BooksPublishedPerYear") %>%
+  mutate(books_per_captia = books_published / population * 100000)
+
+```
+
+We will plot a scatter plot to get a first impression:
+
+```{r}
+books_vs_gdp %>%
+  ggplot() +
+  geom_point(aes(GDP_PPP, books_per_captia)) +
+  xlab("GDP PPP in 2017 US$") +
+  ylab("Books published per 100k Inhabitants") +
+  theme_bw() +
+  labs(title="Books published by economic performance")
+```
+
+We do, like in almost every econometric analysis, a linear regression.
+However we already see that the assumption of homoscadasticity is
+violated. If you are asking which countries are on the far right, it's
+Luxemburg an UAE.
+
+# The Computation
+
+At first we compute the correlation and test for significance:
+
+```{r}
+#| eval: true
+#| warning: false
+#| code-fold: true
+
+cor.test(books_vs_gdp$GDP_PPP, books_vs_gdp$books_per_captia)
+
+```
+
+The correlation of $\rho = 0.605$ is quite high, so we procede to the
+linear model.
+
+```{r}
+#| eval: true
+#| warning: false
+#| code-fold: true
+
+book_model <- lm(GDP_PPP ~ books_per_captia, data = books_vs_gdp )
+summary(book_model)
+```
+
+This technical output tells us, that one published book by 100k
+inhabitants contributes \$138.8\$ US-Dollar to the GDP (PPP) per capita
+and explains roughly $36\%$ of the variance in our observation.
+
+So, that's your answer Tobias!

@@ -2,12 +2,13 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/blog_posts/arima_modeling.html",
-      "/blog_posts/choropleth_map_brandenburg.html",
       "/blog_posts/LP_zero_sum_games.html",
-      "/blog_posts/csp_linear_programming.html",
+      "/blog_posts/handout_berlin_sep_2023.html",
+      "/blog_posts/choropleth_map_brandenburg.html",
+      "/blog_posts/books_gdp.html",
       "/blog_posts/kdv_equation.html",
-      "/blog_posts/handout_berlin_sep_2023.html"
+      "/blog_posts/arima_modeling.html",
+      "/blog_posts/csp_linear_programming.html"
     ]
   }
 ]
