@@ -3,7 +3,7 @@ title: "A curious mathematician"
 author: "Niclas"
 about:
   template: trestles
-  image: profile.jpg
+  image: portrait.jpeg
   links:
     - icon: github
       text: Github
