@@ -1,5 +1,7 @@
 ---
 title: "About"
+execute: 
+    cache: true
 ---
 
 My name is Niclas Richter, a mathematician by training, currently working as a Data Expert in the field of official statistics. I am passionate about exploring computational methods and utilizing quantitative approaches to solve diverse problems, with expertise in Julia, R, and Python. Generally, I am an inquisitive person, which is why I've named this website *'A Curious Mathematician'*.

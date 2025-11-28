@@ -4246,7 +4246,7 @@ ggplot(df, aes(log10(dx), log10(dt))) +
   labs(title = &quot;Time step size required for stability of ZK-scheme&quot;) </code></pre>
 <p>As we can see, the time step required for numerical stability decreases rapidly as the spatial resolution is refined. While experimenting with the required time step, I got memory errors because too many values had to be stored.</p>
 <p>The implementation is done in Julia. First, a mutable structure is defined to hold the coefficients and initial values of the KdV equation. An outer constructor is then used to build the arrays and compute an approximate time step.</p>
-<div id="3aa95bf0" class="cell" data-execution_count="1">
+<div id="1147a0ce" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># implement a structure for the problem</span></span>
@@ -4330,7 +4330,7 @@ ggplot(df, aes(log10(dx), log10(dt))) +
 <p>Furthermore we define the method <code>solve!</code> for the KdV-problem, which solves the problem using periodic boundary conditions. Since the ZKS requires values from the current step and the previous step, we approximate the previous step with an implicit scheme from the initial values before the first iteration. The idea of using an implicit time step for the first time step comes from <span class="citation" data-cites="Taha1984">Taha and Ablowitz (<a href="#ref-Taha1984" role="doc-biblioref">1984</a>)</span>.</p>
 <div class="no-row-height column-margin column-container"><div id="ref-Taha1984" class="csl-entry" role="listitem">
 Taha, Thiab R., and Mark J. Ablowitz. 1984. <span>“Analytical and Numerical Aspects of Certain Nonlinear Evolution Equations. <span>III</span>. <span>Numerical</span>, <span>Korteweg</span>-de <span>Vries</span> Equation.”</span> <em>J. Comput. Phys.</em> 55: 231–53. <a href="https://doi.org/10.1016/0021-9991(84)90004-4">https://doi.org/10.1016/0021-9991(84)90004-4</a>.
-</div></div><div id="30321ca5" class="cell" data-execution_count="2">
+</div></div><div id="dd1020ef" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
@@ -4407,7 +4407,7 @@ Taha, Thiab R., and Mark J. Ablowitz. 1984. <span>“Analytical and Numerical As
 <li><p>I notice a very fast convergence, but after a certain point, the error does not get any smaller.</p></li>
 </ul>
 <p>However, we can see the convergence and thus verify that our implementation works. Below is the <code>Julia</code>` function for testing the ZKS.</p>
-<div id="d36f03ab" class="cell" data-execution_count="3">
+<div id="868880f4" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
@@ -4495,7 +4495,7 @@ Miura, Robert M., Clifford S. Gardner, and Martin D. Kruskal. 1968. <span>“Kor
 C_1 = \int_{-\infty}^\infty u\; dx \qquad \text{and} \\ C_2 = \int_{-\infty}^\infty u^2\; dx.
 \]</span></p>
 <p>We can compute these conserved quantities by approximating the integrals using the trapezoidal rule and show that those are indeed conserved numerically up to a certain degree.</p>
-<div id="fe1381ea" class="cell" data-execution_count="4">
+<div id="243cadc0" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">show_conservation</span>()</span>
@@ -5008,466 +5008,467 @@ C_1 = \int_{-\infty}^\infty u\; dx \qquad \text{and} \\ C_2 = \int_{-\infty}^\in
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2024-01-13</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span><span class="co"> </span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: false</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>While browsing Wikipedia for random bits of mathematical knowledge, I stumbled across the the <span class="co">[</span><span class="ot">article</span><span class="co">](https://en.wikipedia.org/wiki/Korteweg%E2%80%93De_Vries_equation)</span> on Korteveg-De Vries equation (hereafter abbreviated as KdV-equation) with this <span class="co">[</span><span class="ot">gif</span><span class="co">](https://en.wikipedia.org/wiki/Korteweg%E2%80%93De_Vries_equation#/media/File:KdV_equation.gif)</span>. It shows the evolution of a cosine wave through time and the caption claims, that it was computed using the Zabusky-Kruskal-scheme. I had never heard of it, until I read the article. So I decided to take some time to write a blog post about it.</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Korteveg-De Vries-equation</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>The KdV-equation is a nonlinear partial differential equation given by</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>u_t + u_{xxx} + 6uu_x = 0</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>$$ {#eq-01}</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>in $\mathbb{R} \times (0, \infty)$. By the subscripts we denote the temporal and spatial partial derivatives. For further computations we sightly generalize the KdV-equation to</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>\alpha u_t + \beta u_{xxx} + \gamma u u_x = 0</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>$$ {#eq-02}</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>for the real numbers \$\alpha, \beta, \gamma\$. The Wikipedia article mentions the Zabusky-Kruskal scheme (ZKS) as the method which is used. The ZKS is a finite difference scheme on a two dimensional Cartesian grid. So we look up in the original article @Zabusky1965 and adapt the mentioned scheme to our setting and rearrange the terms. This leads to</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>0 = \alpha (\frac{u_i^{j+1} - u_i^{j-1}}{2\Delta t}) + \beta (\frac{- u_{i-2}^j + 2u_{i-1}^j - 2u_{i+1}^j + u_{i+2}^j}{2 \Delta x^3}) + \frac{\gamma}{3}(u_{i-1}^j + u_i^j + u_{i+1}^j)\frac{u_{i+1}^j - u_{i-1}^j}{2\Delta x}.</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>$$ {#eq-03}</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>Here we denote by $u_i^j = u(i\Delta x, j \Delta t)$ the value at the grid point for the function $u(x,t)$. The ZKS is an explicit scheme in time, which needs two time epochs to calculate the next step. To use it, we have to make a step backwards in time with an implicit approximation of the time derivative before we do the first step. Furthermore the ZKS uses periodic boundary conditions for setting appropriate boundary conditions of an unbounded domain.</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="fu"># A soliton solution</span></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>The KdV-equation is an exceptional nonlinear partial differential equation, since for certain values, it can be solved explicitly. In this section we follow @Evans2010 (p. 178f.) and use specific values for $\alpha$, \beta, <span class="sc">\\</span>gamma\$</span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>The equation we will solve is</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>u_t + 6uu_x + u_{xxx} = 0</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>$$ {#eq-04}</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>on $\mathbb{R} \times (0, \infty)$ and we are looking for solutions of the type:</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>u(x,t) = v(x -\sigma t).</span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>Therefore we are looking for solutions which &quot;carry forward&quot; the initial position. The idea to look for solutions of this type comes from observing the nature. The KdV-Equation describes solitary waves in shallow water. To get a picture of a solitary wave, you can watch<span class="co">[</span><span class="ot">this video</span><span class="co">](https://yt.artemislena.eu/watch?v=w-oDnvbV8mY&amp;listen=false)</span>.</span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>If we compute the derivative of $v = v(s)$ and insert it in @eq-03 we get:</span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>-\sigma v&#39; + 6vv&#39; +v&#39;&#39;&#39; = 0.</span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>This is an ODE and we want to solve it explicitly. At first we integrate the equation with respect to $s$ and obtain</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>-\sigma v + 3v^2 + v&#39;&#39; = a</span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>for $a \in \mathbb{R}$. The next step is to multiply the equation with $v&#39;$ which is a not reversible step. Therefore we need to test our computed solution, if it is truly a solution of the KdV-equation. After the multiplication we get</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>-\sigma vv&#39; + 3v^2v&#39; + v&#39;&#39;v&#39; = av&#39;,</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>and integration with respect to $v = v(s)$ yields</span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>\frac{(v&#39;)²}{2} = av + b +\frac{\sigma}{2}v^2 - v^3v&#39;.</span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>To determine the constants of integration $a, b$ we look once again at our observed solitary wave. The wave is localized in a small spatial region and a reasonable assumption of our solution should be then</span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>\lim_{s\to\pm\infty} v(s) = \lim_{s\to\pm\infty} v&#39;(s) = \lim_{s\to\pm\infty} v&#39;&#39;(s) = 0.</span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>Since \$a = -\sigma v + 3v\^2 + v&#39;&#39; \$ for all $s\in \mathbb{R}$ is a constant, we deduce that $a = 0$. Otherwise we could find $\hat{s} \in \mathbb{R}$ such that $$</span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>0 \leq -\sigma v + 3v^2 + v&#39;&#39; &lt; a / 2</span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>$$ for all $s \geq \hat{s}$, which is a contradiction to $a \neq 0$. The same reasoning can be applied to the integration constant $b$ and we deduce $b = 0$. Thus we get</span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>(v&#39;)^2 = v^2(\sigma -2v)</span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>and taking the square root we arrive at</span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>v&#39; = \pm v\sqrt{\sigma - 2v}.</span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>This is a separable ODE and we hope we can solve it. However the integral is not solved in the usual way with the $\operatorname{atanh}$ function, but rather with a substitution you wouldn&#39;t think of. The integral representation of the ODE is</span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>s = - \int_1^{v(s)} \frac{dz}{z\sqrt{z(\sigma - 2z)}} + c.</span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>The substitution \$z = <span class="sc">\\</span>frac{<span class="sc">\\</span>sigma}{2} \operatorname{sech}\^2 \theta\$ gives the solution</span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>v(s) = \frac{\sigma}{2}\operatorname{sech}^2\left(\frac{\sqrt{\sigma}}{2}(s - c)\right)</span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>and thus we finally arrive at</span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>u(x,t) = v(x-\sigma t) = \frac{\sigma}{2}\operatorname{sech}^2\left(\frac{\sqrt{\sigma}}{2}(x - \sigma t - c)\right).</span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>$$ {#eq-05} Now we have to check our solution @eq-05 by inserting it into @eq-04.</span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>We abbreviate $A = \frac{\sqrt{\sigma}}{2}(x - \sigma t)$ and start calculating:</span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>u_t + u_{xxx} + 6uu_x = \frac{\partial}{\partial t}(\frac{\sigma}{2} \operatorname{sech}^2(A)) + \frac{\sigma}{2}\frac{\partial^3}{\partial x^3} \operatorname{sech}^2(A) + \frac{6\sigma^2}{4}\operatorname{sech}(A)\cdot \frac{\partial}{\partial x}\operatorname{sech}(A) \newline</span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>= \sigma^{5/2}\left(\operatorname{tanh}(A)\operatorname{sech}^2(A) + \operatorname{tanh}(A)\operatorname{sech}^4(A) - \frac{1}{2}\operatorname{tanh}^3(A)\operatorname{sech}^2(A) - \frac{3}{2}\operatorname{tanh}(A)\operatorname{sech}^4(A) \right) \newline</span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>= \frac{\sigma^{5/2}}{2\operatorname{cosh}^5(A)}\left((\operatorname{cosh}^2(A) - 1)\operatorname{sinh}(A) - \operatorname{sinh}^3(A) \right) \newline = 0.</span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="fu"># Julia implementation</span></span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>The ZKS is an explicit scheme and usually not every time step size is possible. If the time step is too large numerical instabilities can occur. This can be seen by observing an amplitude that steadily increases until it reaches infinity. The original paper from @Zabusky1965 does not give any information about stability issues, but rather other interesting properties. In fact, the ZKS is only mentioned in a footnote and a citation is given to private correspondence! Those were different times back then...</span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>The article from @Taha1984 gives an overview of different solution techniques for the KdV-equation, and the ZKS is only one of many methods. This article gives as a stability criterion the condition:</span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>\frac{\Delta t}{\Delta x}\left| -2u_0 + \frac{1}{\Delta x^2}\right| \leq \frac{2}{3\sqrt{3}}.</span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>However this given only for the coefficients $\alpha = \beta = 1$ and $\gamma = 6$ and no reasoning why it should be true. Since @eq-01 is highly nonlinear, traditional methods for the numerical stability can not be used directly. If I have more time to prepare this blog post, I would love to find out the stability criterion of @eq-01 by myself.</span>
-<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-timestep</span></span>
-<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Required time step for given spatial resolution and u0 = 1.0&quot;</span></span>
-<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
-<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="co"># Code for generation of the time step graphics</span></span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
-<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a><span class="co"># function for computing an approximate time step</span></span>
-<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a>compute_timestep <span class="ot">&lt;-</span> <span class="cf">function</span>(dx, end_time, u0) {</span>
-<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> end_time</span>
-<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a>  numerical_stable <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(<span class="sc">!</span>numerical_stable) {</span>
-<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a>    dt <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> dt</span>
-<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a>    numerical_stable <span class="ot">&lt;-</span> (dt <span class="sc">/</span> dx) <span class="sc">*</span> <span class="fu">abs</span>(<span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> u0 <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">/</span> dx)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;=</span> <span class="dv">2</span> <span class="sc">/</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">3</span>))</span>
-<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dt)</span>
-<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a><span class="co"># generate log scaled vector for plotting</span></span>
-<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span> <span class="sc">%o%</span> <span class="dv">10</span><span class="sc">^</span>(<span class="sc">-</span><span class="dv">8</span><span class="sc">:-</span><span class="dv">1</span>))</span>
-<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a>end_time <span class="ot">&lt;-</span> <span class="fl">1.0</span></span>
-<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a>u0 <span class="ot">&lt;-</span> <span class="fl">1.0</span></span>
-<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the required time step</span></span>
-<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
-<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
-<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> <span class="fu">compute_timestep</span>(x[i], end_time, u0)</span>
-<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;dx&quot;</span> <span class="ot">=</span> x, <span class="st">&quot;dt&quot;</span> <span class="ot">=</span> y)</span>
-<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="fu">log10</span>(dx), <span class="fu">log10</span>(dt))) <span class="sc">+</span> </span>
-<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb6-184"><a href="#cb6-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_logticks</span>() <span class="sc">+</span></span>
-<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Time step size required for stability of ZK-scheme&quot;</span>) </span>
-<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a>As we can see, the time step required for numerical stability decreases rapidly as the spatial resolution is refined. While experimenting with the required time step, I got memory errors because too many values had to be stored.</span>
-<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a>The implementation is done in Julia. First, a mutable structure is defined to hold the coefficients and initial values of the KdV equation. An outer constructor is then used to build the arrays and compute an approximate time step.</span>
-<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a><span class="co"># implement a structure for the problem</span></span>
-<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a><span class="kw">mutable struct</span> kdv_problem{F <span class="op">&lt;:</span><span class="dt"> AbstractFloat</span>}</span>
-<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">::</span><span class="dt">F            </span><span class="co"># α in the equation</span></span>
-<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">::</span><span class="dt">F             </span><span class="co"># β in the equation</span></span>
-<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a>    gamma<span class="op">::</span><span class="dt">F            </span><span class="co"># γ in the equation</span></span>
-<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a>    delta_x<span class="op">::</span><span class="dt">F          </span><span class="co"># spatial resolution</span></span>
-<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a>    delta_t<span class="op">::</span><span class="dt">F          </span><span class="co"># time resolution</span></span>
-<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a>    interval_length<span class="op">::</span><span class="dt">F  </span><span class="co"># interval length of the base</span></span>
-<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a>    T<span class="op">::</span><span class="dt">F                </span><span class="co"># end time </span></span>
-<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a>    u<span class="op">::</span><span class="dt">Matrix{F}        </span><span class="co"># array for the solution</span></span>
-<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a><span class="co"># Outer constructor for automated sizing the array and initializing it with zeros</span></span>
-<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a><span class="st">    kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)</span></span>
-<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a><span class="st">Set up Korteweg-de Vries (KdV) equation with initial values and suitable parameters.</span></span>
-<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a><span class="st">Compute the time step automatically such that it is a stable scheme.</span></span>
-<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a><span class="st"># Arguments</span></span>
-<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a><span class="st">- `alpha::F`: Parameter for the equation.</span></span>
-<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a><span class="st">- `beta::F`: Parameter for the equation.</span></span>
-<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="st">- `gamma::F`: Parameter for the equation.</span></span>
-<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a><span class="st">- `delta_x::F`: Spatial resolution.</span></span>
-<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="st">- `T::F`: End time for the simulation.</span></span>
-<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a><span class="st">- `interval_length::F`: Length of the spatial interval.</span></span>
-<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a><span class="st">- `initial_values::Vector{F}`: Initial values for the simulation.</span></span>
-<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a><span class="st">- `delta_t`=Nothing: Time resolution, if `Nothing` then it calculates it using the criterion given by Taha1984.</span></span>
-<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a><span class="st"># Returns</span></span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a><span class="st">- `kdv_problem{F}`: An object representing the KdV problem with the specified parameters.</span></span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a><span class="st"># Example</span></span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a><span class="st">alpha = 1.0</span></span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="st">beta = 2.0</span></span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a><span class="st">gamma = 3.0</span></span>
-<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a><span class="st">delta_x = 0.01</span></span>
-<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a><span class="st">T = 5.0</span></span>
-<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a><span class="st">interval_length = 1.0</span></span>
-<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a><span class="st">initial_values = [sin(2 * π * x) for x in 0:delta_x:interval_length]</span></span>
-<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a><span class="st">kdv = kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)</span></span>
-<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">kdv_problem</span>(alpha<span class="op">::</span><span class="dt">F</span>, beta<span class="op">::</span><span class="dt">F</span>, gamma<span class="op">::</span><span class="dt">F</span>, delta_x<span class="op">::</span><span class="dt">F</span>, T<span class="op">::</span><span class="dt">F</span>, interval_length<span class="op">::</span><span class="dt">F</span>, initial_values<span class="op">::</span><span class="dt">Vector{F}</span>, delta_t<span class="op">::</span><span class="dt">Union{F, Nothing} </span><span class="op">=</span> <span class="dt">Nothing</span>) <span class="kw">where</span> F <span class="op">&lt;:</span><span class="dt"> AbstractFloat</span></span>
-<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> T <span class="op">&lt;=</span> <span class="fl">0.0</span></span>
-<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a>        <span class="fu">error</span>(<span class="st">&quot;Negative end time&quot;</span>)</span>
-<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elseif</span> interval_length <span class="op">&lt;=</span> <span class="fl">0.0</span></span>
-<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>        <span class="fu">error</span>(<span class="st">&quot;Negative interval length&quot;</span>)</span>
-<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elseif</span> delta_x <span class="op">&lt;=</span> <span class="fl">0.0</span></span>
-<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>        <span class="fu">error</span>(<span class="st">&quot;Negative spatial resolution&quot;</span>)</span>
-<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="fu">isnothing</span>(delta_t)</span>
-<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>        delta_t <span class="op">=</span> T</span>
-<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>        numerical_stable <span class="op">=</span> <span class="cn">false</span></span>
-<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a>        <span class="co"># compute the time step</span></span>
-<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> !numerical_stable</span>
-<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a>            delta_t <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> delta_t</span>
-<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a>            numerical_stable <span class="op">=</span> delta_t <span class="op">/</span> delta_x <span class="op">*</span> <span class="fu">abs</span>((<span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu">maximum</span>(initial_values) <span class="op">+</span> <span class="fl">1</span> <span class="op">/</span> (delta_x<span class="op">^</span><span class="fl">2</span>))) <span class="op">&lt;=</span> <span class="fl">2</span> <span class="op">/</span> (<span class="fl">3</span> <span class="op">*</span> <span class="fu">sqrt</span>(<span class="fl">3</span>))</span>
-<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
-<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compute the dimensions of the matrix for storing values</span></span>
-<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a>    N_x <span class="op">=</span> <span class="fu">ceil</span>(<span class="dt">Int64</span>, interval_length <span class="op">/</span> delta_x)</span>
-<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a>    N_t <span class="op">=</span> <span class="fu">ceil</span>(<span class="dt">Int64</span>, T <span class="op">/</span> delta_t) <span class="op">+</span> <span class="fl">1</span> <span class="co"># plus one for the implicit scheme at the beginning</span></span>
-<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> <span class="fu">zeros</span>(F, N_x, N_t)</span>
-<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a>    u[<span class="op">:</span>, <span class="fl">2</span>] <span class="op">.=</span> initial_values <span class="co"># set the initial values</span></span>
-<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">kdv_problem</span><span class="dt">{F}</span>(alpha, beta, gamma, delta_x, delta_t, interval_length, T, u)</span>
-<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>Furthermore we define the method <span class="in">`solve!`</span> for the KdV-problem, which solves the problem using periodic boundary conditions. Since the ZKS requires values from the current step and the previous step, we approximate the previous step with an implicit scheme from the initial values before the first iteration. The idea of using an implicit time step for the first time step comes from @Taha1984.</span>
-<span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a><span class="st">    solve!(P::kdv_problem)</span></span>
-<span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a><span class="st">Solve the Korteweg-de Vries (KdV) equation numerically using an explicit finite difference scheme.</span></span>
-<span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a><span class="st">The Zabusky-Kruskal scheme with periodic boundary conditions is used.</span></span>
-<span id="cb6-284"><a href="#cb6-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-285"><a href="#cb6-285" aria-hidden="true" tabindex="-1"></a><span class="st"># Arguments</span></span>
-<span id="cb6-286"><a href="#cb6-286" aria-hidden="true" tabindex="-1"></a><span class="st">- `P::kdv_problem`: KdV Equation with initial values.</span></span>
-<span id="cb6-287"><a href="#cb6-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">  cache: true</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>While browsing Wikipedia for random bits of mathematical knowledge, I stumbled across the the <span class="co">[</span><span class="ot">article</span><span class="co">](https://en.wikipedia.org/wiki/Korteweg%E2%80%93De_Vries_equation)</span> on Korteveg-De Vries equation (hereafter abbreviated as KdV-equation) with this <span class="co">[</span><span class="ot">gif</span><span class="co">](https://en.wikipedia.org/wiki/Korteweg%E2%80%93De_Vries_equation#/media/File:KdV_equation.gif)</span>. It shows the evolution of a cosine wave through time and the caption claims, that it was computed using the Zabusky-Kruskal-scheme. I had never heard of it, until I read the article. So I decided to take some time to write a blog post about it.</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Korteveg-De Vries-equation</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>The KdV-equation is a nonlinear partial differential equation given by</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>u_t + u_{xxx} + 6uu_x = 0</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>$$ {#eq-01}</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>in $\mathbb{R} \times (0, \infty)$. By the subscripts we denote the temporal and spatial partial derivatives. For further computations we sightly generalize the KdV-equation to</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>\alpha u_t + \beta u_{xxx} + \gamma u u_x = 0</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>$$ {#eq-02}</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>for the real numbers \$\alpha, \beta, \gamma\$. The Wikipedia article mentions the Zabusky-Kruskal scheme (ZKS) as the method which is used. The ZKS is a finite difference scheme on a two dimensional Cartesian grid. So we look up in the original article @Zabusky1965 and adapt the mentioned scheme to our setting and rearrange the terms. This leads to</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>0 = \alpha (\frac{u_i^{j+1} - u_i^{j-1}}{2\Delta t}) + \beta (\frac{- u_{i-2}^j + 2u_{i-1}^j - 2u_{i+1}^j + u_{i+2}^j}{2 \Delta x^3}) + \frac{\gamma}{3}(u_{i-1}^j + u_i^j + u_{i+1}^j)\frac{u_{i+1}^j - u_{i-1}^j}{2\Delta x}.</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>$$ {#eq-03}</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>Here we denote by $u_i^j = u(i\Delta x, j \Delta t)$ the value at the grid point for the function $u(x,t)$. The ZKS is an explicit scheme in time, which needs two time epochs to calculate the next step. To use it, we have to make a step backwards in time with an implicit approximation of the time derivative before we do the first step. Furthermore the ZKS uses periodic boundary conditions for setting appropriate boundary conditions of an unbounded domain.</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="fu"># A soliton solution</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>The KdV-equation is an exceptional nonlinear partial differential equation, since for certain values, it can be solved explicitly. In this section we follow @Evans2010 (p. 178f.) and use specific values for $\alpha$, \beta, <span class="sc">\\</span>gamma\$</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>The equation we will solve is</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>u_t + 6uu_x + u_{xxx} = 0</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>$$ {#eq-04}</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>on $\mathbb{R} \times (0, \infty)$ and we are looking for solutions of the type:</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>u(x,t) = v(x -\sigma t).</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>Therefore we are looking for solutions which &quot;carry forward&quot; the initial position. The idea to look for solutions of this type comes from observing the nature. The KdV-Equation describes solitary waves in shallow water. To get a picture of a solitary wave, you can watch<span class="co">[</span><span class="ot">this video</span><span class="co">](https://yt.artemislena.eu/watch?v=w-oDnvbV8mY&amp;listen=false)</span>.</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>If we compute the derivative of $v = v(s)$ and insert it in @eq-03 we get:</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>-\sigma v&#39; + 6vv&#39; +v&#39;&#39;&#39; = 0.</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>This is an ODE and we want to solve it explicitly. At first we integrate the equation with respect to $s$ and obtain</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>-\sigma v + 3v^2 + v&#39;&#39; = a</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>for $a \in \mathbb{R}$. The next step is to multiply the equation with $v&#39;$ which is a not reversible step. Therefore we need to test our computed solution, if it is truly a solution of the KdV-equation. After the multiplication we get</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>-\sigma vv&#39; + 3v^2v&#39; + v&#39;&#39;v&#39; = av&#39;,</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>and integration with respect to $v = v(s)$ yields</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>\frac{(v&#39;)²}{2} = av + b +\frac{\sigma}{2}v^2 - v^3v&#39;.</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>To determine the constants of integration $a, b$ we look once again at our observed solitary wave. The wave is localized in a small spatial region and a reasonable assumption of our solution should be then</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>\lim_{s\to\pm\infty} v(s) = \lim_{s\to\pm\infty} v&#39;(s) = \lim_{s\to\pm\infty} v&#39;&#39;(s) = 0.</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>Since \$a = -\sigma v + 3v\^2 + v&#39;&#39; \$ for all $s\in \mathbb{R}$ is a constant, we deduce that $a = 0$. Otherwise we could find $\hat{s} \in \mathbb{R}$ such that $$</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>0 \leq -\sigma v + 3v^2 + v&#39;&#39; &lt; a / 2</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>$$ for all $s \geq \hat{s}$, which is a contradiction to $a \neq 0$. The same reasoning can be applied to the integration constant $b$ and we deduce $b = 0$. Thus we get</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>(v&#39;)^2 = v^2(\sigma -2v)</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>and taking the square root we arrive at</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>v&#39; = \pm v\sqrt{\sigma - 2v}.</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>This is a separable ODE and we hope we can solve it. However the integral is not solved in the usual way with the $\operatorname{atanh}$ function, but rather with a substitution you wouldn&#39;t think of. The integral representation of the ODE is</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>s = - \int_1^{v(s)} \frac{dz}{z\sqrt{z(\sigma - 2z)}} + c.</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>The substitution \$z = <span class="sc">\\</span>frac{<span class="sc">\\</span>sigma}{2} \operatorname{sech}\^2 \theta\$ gives the solution</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>v(s) = \frac{\sigma}{2}\operatorname{sech}^2\left(\frac{\sqrt{\sigma}}{2}(s - c)\right)</span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>and thus we finally arrive at</span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>u(x,t) = v(x-\sigma t) = \frac{\sigma}{2}\operatorname{sech}^2\left(\frac{\sqrt{\sigma}}{2}(x - \sigma t - c)\right).</span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>$$ {#eq-05} Now we have to check our solution @eq-05 by inserting it into @eq-04.</span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>We abbreviate $A = \frac{\sqrt{\sigma}}{2}(x - \sigma t)$ and start calculating:</span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>u_t + u_{xxx} + 6uu_x = \frac{\partial}{\partial t}(\frac{\sigma}{2} \operatorname{sech}^2(A)) + \frac{\sigma}{2}\frac{\partial^3}{\partial x^3} \operatorname{sech}^2(A) + \frac{6\sigma^2}{4}\operatorname{sech}(A)\cdot \frac{\partial}{\partial x}\operatorname{sech}(A) \newline</span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>= \sigma^{5/2}\left(\operatorname{tanh}(A)\operatorname{sech}^2(A) + \operatorname{tanh}(A)\operatorname{sech}^4(A) - \frac{1}{2}\operatorname{tanh}^3(A)\operatorname{sech}^2(A) - \frac{3}{2}\operatorname{tanh}(A)\operatorname{sech}^4(A) \right) \newline</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>= \frac{\sigma^{5/2}}{2\operatorname{cosh}^5(A)}\left((\operatorname{cosh}^2(A) - 1)\operatorname{sinh}(A) - \operatorname{sinh}^3(A) \right) \newline = 0.</span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="fu"># Julia implementation</span></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>The ZKS is an explicit scheme and usually not every time step size is possible. If the time step is too large numerical instabilities can occur. This can be seen by observing an amplitude that steadily increases until it reaches infinity. The original paper from @Zabusky1965 does not give any information about stability issues, but rather other interesting properties. In fact, the ZKS is only mentioned in a footnote and a citation is given to private correspondence! Those were different times back then...</span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>The article from @Taha1984 gives an overview of different solution techniques for the KdV-equation, and the ZKS is only one of many methods. This article gives as a stability criterion the condition:</span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>\frac{\Delta t}{\Delta x}\left| -2u_0 + \frac{1}{\Delta x^2}\right| \leq \frac{2}{3\sqrt{3}}.</span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>However this given only for the coefficients $\alpha = \beta = 1$ and $\gamma = 6$ and no reasoning why it should be true. Since @eq-01 is highly nonlinear, traditional methods for the numerical stability can not be used directly. If I have more time to prepare this blog post, I would love to find out the stability criterion of @eq-01 by myself.</span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-timestep</span></span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Required time step for given spatial resolution and u0 = 1.0&quot;</span></span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="co"># Code for generation of the time step graphics</span></span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a><span class="co"># Load libraries</span></span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a><span class="co"># function for computing an approximate time step</span></span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a>compute_timestep <span class="ot">&lt;-</span> <span class="cf">function</span>(dx, end_time, u0) {</span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> end_time</span>
+<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a>  numerical_stable <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(<span class="sc">!</span>numerical_stable) {</span>
+<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a>    dt <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> dt</span>
+<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a>    numerical_stable <span class="ot">&lt;-</span> (dt <span class="sc">/</span> dx) <span class="sc">*</span> <span class="fu">abs</span>(<span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> u0 <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">/</span> dx)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;=</span> <span class="dv">2</span> <span class="sc">/</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">3</span>))</span>
+<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dt)</span>
+<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a><span class="co"># generate log scaled vector for plotting</span></span>
+<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span> <span class="sc">%o%</span> <span class="dv">10</span><span class="sc">^</span>(<span class="sc">-</span><span class="dv">8</span><span class="sc">:-</span><span class="dv">1</span>))</span>
+<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a>end_time <span class="ot">&lt;-</span> <span class="fl">1.0</span></span>
+<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a>u0 <span class="ot">&lt;-</span> <span class="fl">1.0</span></span>
+<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the required time step</span></span>
+<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(x))</span>
+<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
+<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a>  y[i] <span class="ot">&lt;-</span> <span class="fu">compute_timestep</span>(x[i], end_time, u0)</span>
+<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;dx&quot;</span> <span class="ot">=</span> x, <span class="st">&quot;dt&quot;</span> <span class="ot">=</span> y)</span>
+<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="fu">log10</span>(dx), <span class="fu">log10</span>(dt))) <span class="sc">+</span> </span>
+<span id="cb6-184"><a href="#cb6-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_logticks</span>() <span class="sc">+</span></span>
+<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Time step size required for stability of ZK-scheme&quot;</span>) </span>
+<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a>As we can see, the time step required for numerical stability decreases rapidly as the spatial resolution is refined. While experimenting with the required time step, I got memory errors because too many values had to be stored.</span>
+<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a>The implementation is done in Julia. First, a mutable structure is defined to hold the coefficients and initial values of the KdV equation. An outer constructor is then used to build the arrays and compute an approximate time step.</span>
+<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a><span class="co"># implement a structure for the problem</span></span>
+<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a><span class="kw">mutable struct</span> kdv_problem{F <span class="op">&lt;:</span><span class="dt"> AbstractFloat</span>}</span>
+<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">::</span><span class="dt">F            </span><span class="co"># α in the equation</span></span>
+<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">::</span><span class="dt">F             </span><span class="co"># β in the equation</span></span>
+<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a>    gamma<span class="op">::</span><span class="dt">F            </span><span class="co"># γ in the equation</span></span>
+<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a>    delta_x<span class="op">::</span><span class="dt">F          </span><span class="co"># spatial resolution</span></span>
+<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a>    delta_t<span class="op">::</span><span class="dt">F          </span><span class="co"># time resolution</span></span>
+<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a>    interval_length<span class="op">::</span><span class="dt">F  </span><span class="co"># interval length of the base</span></span>
+<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a>    T<span class="op">::</span><span class="dt">F                </span><span class="co"># end time </span></span>
+<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a>    u<span class="op">::</span><span class="dt">Matrix{F}        </span><span class="co"># array for the solution</span></span>
+<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a><span class="co"># Outer constructor for automated sizing the array and initializing it with zeros</span></span>
+<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a><span class="st">    kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)</span></span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a><span class="st">Set up Korteweg-de Vries (KdV) equation with initial values and suitable parameters.</span></span>
+<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a><span class="st">Compute the time step automatically such that it is a stable scheme.</span></span>
+<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a><span class="st"># Arguments</span></span>
+<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a><span class="st">- `alpha::F`: Parameter for the equation.</span></span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="st">- `beta::F`: Parameter for the equation.</span></span>
+<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a><span class="st">- `gamma::F`: Parameter for the equation.</span></span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="st">- `delta_x::F`: Spatial resolution.</span></span>
+<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a><span class="st">- `T::F`: End time for the simulation.</span></span>
+<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a><span class="st">- `interval_length::F`: Length of the spatial interval.</span></span>
+<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a><span class="st">- `initial_values::Vector{F}`: Initial values for the simulation.</span></span>
+<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a><span class="st">- `delta_t`=Nothing: Time resolution, if `Nothing` then it calculates it using the criterion given by Taha1984.</span></span>
+<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a><span class="st"># Returns</span></span>
+<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a><span class="st">- `kdv_problem{F}`: An object representing the KdV problem with the specified parameters.</span></span>
+<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a><span class="st"># Example</span></span>
+<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="st">alpha = 1.0</span></span>
+<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a><span class="st">beta = 2.0</span></span>
+<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a><span class="st">gamma = 3.0</span></span>
+<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a><span class="st">delta_x = 0.01</span></span>
+<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a><span class="st">T = 5.0</span></span>
+<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a><span class="st">interval_length = 1.0</span></span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a><span class="st">initial_values = [sin(2 * π * x) for x in 0:delta_x:interval_length]</span></span>
+<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a><span class="st">kdv = kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)</span></span>
+<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">kdv_problem</span>(alpha<span class="op">::</span><span class="dt">F</span>, beta<span class="op">::</span><span class="dt">F</span>, gamma<span class="op">::</span><span class="dt">F</span>, delta_x<span class="op">::</span><span class="dt">F</span>, T<span class="op">::</span><span class="dt">F</span>, interval_length<span class="op">::</span><span class="dt">F</span>, initial_values<span class="op">::</span><span class="dt">Vector{F}</span>, delta_t<span class="op">::</span><span class="dt">Union{F, Nothing} </span><span class="op">=</span> <span class="dt">Nothing</span>) <span class="kw">where</span> F <span class="op">&lt;:</span><span class="dt"> AbstractFloat</span></span>
+<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> T <span class="op">&lt;=</span> <span class="fl">0.0</span></span>
+<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>        <span class="fu">error</span>(<span class="st">&quot;Negative end time&quot;</span>)</span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elseif</span> interval_length <span class="op">&lt;=</span> <span class="fl">0.0</span></span>
+<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>        <span class="fu">error</span>(<span class="st">&quot;Negative interval length&quot;</span>)</span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elseif</span> delta_x <span class="op">&lt;=</span> <span class="fl">0.0</span></span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>        <span class="fu">error</span>(<span class="st">&quot;Negative spatial resolution&quot;</span>)</span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="fu">isnothing</span>(delta_t)</span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>        delta_t <span class="op">=</span> T</span>
+<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a>        numerical_stable <span class="op">=</span> <span class="cn">false</span></span>
+<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a>        <span class="co"># compute the time step</span></span>
+<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> !numerical_stable</span>
+<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a>            delta_t <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> delta_t</span>
+<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a>            numerical_stable <span class="op">=</span> delta_t <span class="op">/</span> delta_x <span class="op">*</span> <span class="fu">abs</span>((<span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu">maximum</span>(initial_values) <span class="op">+</span> <span class="fl">1</span> <span class="op">/</span> (delta_x<span class="op">^</span><span class="fl">2</span>))) <span class="op">&lt;=</span> <span class="fl">2</span> <span class="op">/</span> (<span class="fl">3</span> <span class="op">*</span> <span class="fu">sqrt</span>(<span class="fl">3</span>))</span>
+<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compute the dimensions of the matrix for storing values</span></span>
+<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a>    N_x <span class="op">=</span> <span class="fu">ceil</span>(<span class="dt">Int64</span>, interval_length <span class="op">/</span> delta_x)</span>
+<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>    N_t <span class="op">=</span> <span class="fu">ceil</span>(<span class="dt">Int64</span>, T <span class="op">/</span> delta_t) <span class="op">+</span> <span class="fl">1</span> <span class="co"># plus one for the implicit scheme at the beginning</span></span>
+<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> <span class="fu">zeros</span>(F, N_x, N_t)</span>
+<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>    u[<span class="op">:</span>, <span class="fl">2</span>] <span class="op">.=</span> initial_values <span class="co"># set the initial values</span></span>
+<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">kdv_problem</span><span class="dt">{F}</span>(alpha, beta, gamma, delta_x, delta_t, interval_length, T, u)</span>
+<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a>Furthermore we define the method <span class="in">`solve!`</span> for the KdV-problem, which solves the problem using periodic boundary conditions. Since the ZKS requires values from the current step and the previous step, we approximate the previous step with an implicit scheme from the initial values before the first iteration. The idea of using an implicit time step for the first time step comes from @Taha1984.</span>
+<span id="cb6-276"><a href="#cb6-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a><span class="st">    solve!(P::kdv_problem)</span></span>
+<span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a><span class="st">Solve the Korteweg-de Vries (KdV) equation numerically using an explicit finite difference scheme.</span></span>
+<span id="cb6-284"><a href="#cb6-284" aria-hidden="true" tabindex="-1"></a><span class="st">The Zabusky-Kruskal scheme with periodic boundary conditions is used.</span></span>
+<span id="cb6-285"><a href="#cb6-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-286"><a href="#cb6-286" aria-hidden="true" tabindex="-1"></a><span class="st"># Arguments</span></span>
+<span id="cb6-287"><a href="#cb6-287" aria-hidden="true" tabindex="-1"></a><span class="st">- `P::kdv_problem`: KdV Equation with initial values.</span></span>
 <span id="cb6-288"><a href="#cb6-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a><span class="st"># Returns</span></span>
-<span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a><span class="st">- `kdv_problem{F}`: An object representing the KdV problem with the specified parameters.</span></span>
-<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a><span class="st"># Example</span></span>
-<span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a><span class="st">alpha = 1.0</span></span>
-<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a><span class="st">beta = 2.0</span></span>
-<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a><span class="st">gamma = 3.0</span></span>
-<span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a><span class="st">delta_x = 0.01</span></span>
-<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a><span class="st">T = 5.0</span></span>
-<span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a><span class="st">interval_length = 1.0</span></span>
-<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a><span class="st">initial_values = [sin(2 * π * x) for x in 0:delta_x:interval_length]</span></span>
-<span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-301"><a href="#cb6-301" aria-hidden="true" tabindex="-1"></a><span class="st">kdv = kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)</span></span>
-<span id="cb6-302"><a href="#cb6-302" aria-hidden="true" tabindex="-1"></a><span class="st">solve!(kdv)</span></span>
-<span id="cb6-303"><a href="#cb6-303" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-304"><a href="#cb6-304" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">solve!</span>(P<span class="op">::</span><span class="dt">kdv_problem</span>)</span>
-<span id="cb6-305"><a href="#cb6-305" aria-hidden="true" tabindex="-1"></a>    N_x, N_t <span class="op">=</span> <span class="fu">size</span>(P.u)</span>
-<span id="cb6-306"><a href="#cb6-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-307"><a href="#cb6-307" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use an implicit scheme to solve for the time - Δt, since two time steps </span></span>
-<span id="cb6-308"><a href="#cb6-308" aria-hidden="true" tabindex="-1"></a>    <span class="co"># are necessary for the Zabusky-Kruskal scheme</span></span>
-<span id="cb6-309"><a href="#cb6-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-310"><a href="#cb6-310" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>N_x<span class="op">-</span><span class="fl">1</span></span>
-<span id="cb6-311"><a href="#cb6-311" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate the indices according to the boundary conditions</span></span>
-<span id="cb6-312"><a href="#cb6-312" aria-hidden="true" tabindex="-1"></a>        in2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># two indices to the right (next index)</span></span>
-<span id="cb6-313"><a href="#cb6-313" aria-hidden="true" tabindex="-1"></a>        in1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># one index to the right (next index)</span></span>
-<span id="cb6-314"><a href="#cb6-314" aria-hidden="true" tabindex="-1"></a>        ip1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># one index before, (to the left)</span></span>
-<span id="cb6-315"><a href="#cb6-315" aria-hidden="true" tabindex="-1"></a>        ip2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># two indices before, (to the left)</span></span>
-<span id="cb6-316"><a href="#cb6-316" aria-hidden="true" tabindex="-1"></a>        k <span class="op">=</span> i <span class="op">+</span> <span class="fl">1</span></span>
-<span id="cb6-317"><a href="#cb6-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-318"><a href="#cb6-318" aria-hidden="true" tabindex="-1"></a>        dispersion <span class="op">=</span> P.beta <span class="op">*</span> ( <span class="op">-</span>P.u[ip2, <span class="fl">2</span>] <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> P.u[ip1, <span class="fl">2</span>] <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> P.u[in1, <span class="fl">2</span>] <span class="op">+</span> P.u[in2, <span class="fl">2</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x<span class="op">^</span><span class="fl">3</span>)</span>
-<span id="cb6-319"><a href="#cb6-319" aria-hidden="true" tabindex="-1"></a>        advection <span class="op">=</span> (P.gamma <span class="op">/</span> <span class="fl">3</span>) <span class="op">*</span> (P.u[ip1, <span class="fl">2</span>] <span class="op">+</span> P.u[k, <span class="fl">2</span>] <span class="op">+</span> P.u[in1, <span class="fl">2</span>]) <span class="op">*</span> ((P.u[in1, <span class="fl">2</span>] <span class="op">-</span> P.u[ip1, <span class="fl">2</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x))</span>
-<span id="cb6-320"><a href="#cb6-320" aria-hidden="true" tabindex="-1"></a>        P.u[k, <span class="fl">1</span>] <span class="op">=</span> P.u[k, <span class="fl">2</span>] <span class="op">+</span> (P.delta_t <span class="op">/</span> P.alpha) <span class="op">*</span> (dispersion <span class="op">+</span> advection)</span>
-<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>    <span class="co"># now apply the ZK-scheme since the initial values and the values at -Δt</span></span>
-<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a>    <span class="co"># are known</span></span>
-<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="fl">3</span><span class="op">:</span>N_t</span>
-<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>N_x<span class="op">-</span><span class="fl">1</span></span>
-<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate the indices according to the boundary conditions</span></span>
-<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>            in2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># two indices to the right (next index)</span></span>
-<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>            in1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># one index to the right (next index)</span></span>
-<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a>            ip1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># one index before, (to the left)</span></span>
-<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>            ip2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># two indices before, (to the left)</span></span>
-<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>            k <span class="op">=</span> i <span class="op">+</span> <span class="fl">1</span></span>
-<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a>            dispersion <span class="op">=</span> P.beta <span class="op">*</span> ( <span class="op">-</span>P.u[ip2, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> P.u[ip1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> P.u[in1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> P.u[in2, j<span class="op">-</span><span class="fl">1</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x<span class="op">^</span><span class="fl">3</span>)</span>
-<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>            advection <span class="op">=</span> (P.gamma <span class="op">/</span> <span class="fl">3</span>) <span class="op">*</span> (P.u[ip1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> P.u[k, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> P.u[in1, j<span class="op">-</span><span class="fl">1</span>]) <span class="op">*</span> ((P.u[in1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">-</span> P.u[ip1, j<span class="op">-</span><span class="fl">1</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x))</span>
-<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>            P.u[k, j] <span class="op">=</span> P.u[k, j <span class="op">-</span> <span class="fl">2</span>] <span class="op">-</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_t <span class="op">/</span> P.alpha) <span class="op">*</span> (dispersion <span class="op">+</span> advection)</span>
-<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
-<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a><span class="fu"># Testing with the soliton solution</span></span>
-<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a>Since we have an analytic solution at hand, we can test our implementation against it. We have a free parameter $\sigma$, which we set $\sigma = 1$. While trying to show the convergence in various norms (1-, 2-norm and the infinity norm) I noticed the following things:</span>
-<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The solitary wave must be completely contained within the boundary, otherwise the values are rubbish.</span>
-<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I notice a very fast convergence, but after a certain point, the error does not get any smaller.</span>
-<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a>However, we can see the convergence and thus verify that our implementation works. Below is the <span class="in">`Julia`</span><span class="sc">\`</span> function for testing the ZKS.</span>
-<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a><span class="st">test_ZK_scheme()</span></span>
-<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a><span class="st">Test the Zk-scheme for the solution</span></span>
-<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a><span class="st">u(x,t) = 0.5 * sech(0.5 * (x - t) - 4.0)^2</span></span>
-<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a><span class="st">for the KdV equation</span></span>
-<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a><span class="st">    0 = 1.0 * u_t + 1.0 * u_xxx + 6.0 * u_x * u </span></span>
-<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">test_ZK_scheme</span>()</span>
-<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>    σ <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>    start_point  <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>    end_point <span class="op">=</span> <span class="fl">20</span></span>
-<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>    interval_length <span class="op">=</span> end_point <span class="op">-</span> start_point</span>
-<span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a>    end_time <span class="op">=</span> <span class="fl">0.2</span></span>
-<span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exact_sol</span>(x,t) <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> σ <span class="op">*</span> <span class="fu">sech</span>(<span class="fu">sqrt</span>(σ) <span class="op">*</span> <span class="fl">0.5</span> <span class="op">*</span> (x <span class="op">-</span> σ<span class="op">*</span>t) <span class="op">-</span><span class="fl">4.0</span>)<span class="op">^</span><span class="fl">2</span></span>
-<span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inital_values</span>(x) <span class="op">=</span> <span class="fu">exact_sol</span>(x, <span class="fl">0.0</span>)</span>
-<span id="cb6-375"><a href="#cb6-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-376"><a href="#cb6-376" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span><span class="fl">6</span></span>
-<span id="cb6-377"><a href="#cb6-377" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set up the problem</span></span>
-<span id="cb6-378"><a href="#cb6-378" aria-hidden="true" tabindex="-1"></a>        dx <span class="op">=</span> <span class="fl">0.5</span><span class="op">^</span>k</span>
-<span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(start_point, end_point, step<span class="op">=</span> dx))</span>
-<span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a>        initial_values <span class="op">=</span> <span class="fu">inital_values</span>.(x)</span>
-<span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a>        P <span class="op">=</span> <span class="fu">kdv_problem</span>(<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">6.0</span>, dx, end_time, interval_length, initial_values)</span>
-<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a>        <span class="co"># solve the Problem</span></span>
-<span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a>        <span class="fu">solve!</span>(P)</span>
-<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute the error</span></span>
-<span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a>        dt <span class="op">=</span> P.delta_t</span>
-<span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>        approximate_solution <span class="op">=</span> P.u[<span class="op">:</span>, <span class="kw">end</span>]</span>
-<span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a>        exact_solution <span class="op">=</span> <span class="fu">exact_sol</span>.(x, end_time)</span>
-<span id="cb6-390"><a href="#cb6-390" aria-hidden="true" tabindex="-1"></a>        err_vec <span class="op">=</span> <span class="fu">abs</span>.(exact_solution <span class="op">-</span> approximate_solution)</span>
-<span id="cb6-391"><a href="#cb6-391" aria-hidden="true" tabindex="-1"></a>        <span class="co"># compute the error norms</span></span>
-<span id="cb6-392"><a href="#cb6-392" aria-hidden="true" tabindex="-1"></a>        err_inf_norm <span class="op">=</span> <span class="fu">maximum</span>(err_vec)</span>
-<span id="cb6-393"><a href="#cb6-393" aria-hidden="true" tabindex="-1"></a>        err_1_norm <span class="op">=</span> <span class="fu">trapezoidal_rule</span>(x, err_vec)</span>
-<span id="cb6-394"><a href="#cb6-394" aria-hidden="true" tabindex="-1"></a>        err_2_norm <span class="op">=</span> <span class="fu">sqrt</span>(<span class="fu">trapezoidal_rule</span>(x, err_vec <span class="op">.*</span> err_vec))</span>
-<span id="cb6-395"><a href="#cb6-395" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">&quot;+&quot;</span><span class="op">^</span><span class="fl">80</span>)</span>
-<span id="cb6-396"><a href="#cb6-396" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">&quot;k = </span><span class="sc">$</span>k<span class="st">&quot;</span>)</span>
-<span id="cb6-397"><a href="#cb6-397" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;dx = %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> dx</span>
-<span id="cb6-398"><a href="#cb6-398" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;dt = %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> dt</span>
-<span id="cb6-399"><a href="#cb6-399" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;error_inf_norm = %.3e </span><span class="sc">\n</span><span class="st">&quot;</span> err_inf_norm</span>
-<span id="cb6-400"><a href="#cb6-400" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;error_1_norm = %.3e </span><span class="sc">\n</span><span class="st">&quot;</span> err_1_norm</span>
-<span id="cb6-401"><a href="#cb6-401" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;error_2_norm = %.3e </span><span class="sc">\n</span><span class="st">&quot;</span> err_2_norm</span>
-<span id="cb6-402"><a href="#cb6-402" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb6-403"><a href="#cb6-403" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-404"><a href="#cb6-404" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb6-405"><a href="#cb6-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-406"><a href="#cb6-406" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-407"><a href="#cb6-407" aria-hidden="true" tabindex="-1"></a><span class="st">    trapezoidal_rule(x, y)</span></span>
-<span id="cb6-408"><a href="#cb6-408" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-409"><a href="#cb6-409" aria-hidden="true" tabindex="-1"></a><span class="st">Compute the numerical approximation of the definite integral using the trapezoidal rule.</span></span>
-<span id="cb6-410"><a href="#cb6-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-411"><a href="#cb6-411" aria-hidden="true" tabindex="-1"></a><span class="st"># Arguments</span></span>
-<span id="cb6-412"><a href="#cb6-412" aria-hidden="true" tabindex="-1"></a><span class="st">- `x::Vector`: Vector of sample points representing the independent variable.</span></span>
-<span id="cb6-413"><a href="#cb6-413" aria-hidden="true" tabindex="-1"></a><span class="st">- `y::Vector`: Vector of function values corresponding to each sample point.</span></span>
-<span id="cb6-414"><a href="#cb6-414" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-415"><a href="#cb6-415" aria-hidden="true" tabindex="-1"></a><span class="st"># Output</span></span>
-<span id="cb6-416"><a href="#cb6-416" aria-hidden="true" tabindex="-1"></a><span class="st">- Returns the numerical approximation of the definite integral using the trapezoidal rule.</span></span>
-<span id="cb6-417"><a href="#cb6-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-418"><a href="#cb6-418" aria-hidden="true" tabindex="-1"></a><span class="st"># Examples</span></span>
-<span id="cb6-419"><a href="#cb6-419" aria-hidden="true" tabindex="-1"></a><span class="st">x_values = [0.0, 0.1, 0.2, 0.3, 0.4]</span></span>
-<span id="cb6-420"><a href="#cb6-420" aria-hidden="true" tabindex="-1"></a><span class="st">y_values = [f(x) for x in x_values]  # Replace f(x) with your function</span></span>
-<span id="cb6-421"><a href="#cb6-421" aria-hidden="true" tabindex="-1"></a><span class="st">result = trapezoidal_rule(x_values, y_values)</span></span>
-<span id="cb6-422"><a href="#cb6-422" aria-hidden="true" tabindex="-1"></a><span class="st">println(&quot;Trapezoidal Rule Integral: &quot;, result)</span></span>
-<span id="cb6-423"><a href="#cb6-423" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-424"><a href="#cb6-424" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">trapezoidal_rule</span>(x, y)</span>
-<span id="cb6-425"><a href="#cb6-425" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> <span class="fu">diff</span>(x)</span>
-<span id="cb6-426"><a href="#cb6-426" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">sum</span>((y[<span class="fl">1</span><span class="op">:</span><span class="kw">end</span><span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> y[<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>]) <span class="op">.*</span> h) <span class="op">*</span> <span class="fl">0.5</span></span>
-<span id="cb6-427"><a href="#cb6-427" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb6-428"><a href="#cb6-428" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-429"><a href="#cb6-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-430"><a href="#cb6-430" aria-hidden="true" tabindex="-1"></a><span class="fu"># The conservation of integrals</span></span>
-<span id="cb6-431"><a href="#cb6-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-432"><a href="#cb6-432" aria-hidden="true" tabindex="-1"></a>One of the most intriguing properties of the KdV-equation is the conservation of infinitely many quantities which is shown in the article @Miura1968. The article *Korteveg-de Vrie Eequation* of Alper Korkmaz in @Encyclopedia2015 lists the first quantities which are conserved by the KdV-equation, namely</span>
-<span id="cb6-433"><a href="#cb6-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-434"><a href="#cb6-434" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-435"><a href="#cb6-435" aria-hidden="true" tabindex="-1"></a>C_1 = \int_{-\infty}^\infty u\; dx \qquad \text{and} <span class="sc">\\</span> C_2 = \int_{-\infty}^\infty u^2\; dx.</span>
-<span id="cb6-436"><a href="#cb6-436" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-437"><a href="#cb6-437" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-438"><a href="#cb6-438" aria-hidden="true" tabindex="-1"></a>We can compute these conserved quantities by approximating the integrals using the trapezoidal rule and show that those are indeed conserved numerically up to a certain degree.</span>
-<span id="cb6-439"><a href="#cb6-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-442"><a href="#cb6-442" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb6-443"><a href="#cb6-443" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">show_conservation</span>()</span>
-<span id="cb6-444"><a href="#cb6-444" aria-hidden="true" tabindex="-1"></a>    <span class="co"># set up the KdV Equation and solve it</span></span>
-<span id="cb6-445"><a href="#cb6-445" aria-hidden="true" tabindex="-1"></a>    σ <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb6-446"><a href="#cb6-446" aria-hidden="true" tabindex="-1"></a>    start_point  <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb6-447"><a href="#cb6-447" aria-hidden="true" tabindex="-1"></a>    end_point <span class="op">=</span> <span class="fl">20</span></span>
-<span id="cb6-448"><a href="#cb6-448" aria-hidden="true" tabindex="-1"></a>    interval_length <span class="op">=</span> end_point <span class="op">-</span> start_point</span>
-<span id="cb6-449"><a href="#cb6-449" aria-hidden="true" tabindex="-1"></a>    end_time <span class="op">=</span> <span class="fl">0.2</span></span>
-<span id="cb6-450"><a href="#cb6-450" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exact_sol</span>(x,t) <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> σ <span class="op">*</span> <span class="fu">sech</span>(<span class="fu">sqrt</span>(σ) <span class="op">*</span> <span class="fl">0.5</span> <span class="op">*</span> (x <span class="op">-</span> σ<span class="op">*</span>t) <span class="op">-</span><span class="fl">4.0</span>)<span class="op">^</span><span class="fl">2</span></span>
-<span id="cb6-451"><a href="#cb6-451" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inital_values</span>(x) <span class="op">=</span> <span class="fu">exact_sol</span>(x, <span class="fl">0.0</span>)</span>
-<span id="cb6-452"><a href="#cb6-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-453"><a href="#cb6-453" aria-hidden="true" tabindex="-1"></a>    dx <span class="op">=</span> <span class="fl">0.5</span><span class="op">^</span><span class="fl">4</span></span>
-<span id="cb6-454"><a href="#cb6-454" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(start_point, end_point, step<span class="op">=</span> dx))</span>
-<span id="cb6-455"><a href="#cb6-455" aria-hidden="true" tabindex="-1"></a>    initial_values <span class="op">=</span> <span class="fu">inital_values</span>.(x)</span>
-<span id="cb6-456"><a href="#cb6-456" aria-hidden="true" tabindex="-1"></a>    P <span class="op">=</span> <span class="fu">kdv_problem</span>(<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">6.0</span>, dx, end_time, interval_length, initial_values)</span>
-<span id="cb6-457"><a href="#cb6-457" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-458"><a href="#cb6-458" aria-hidden="true" tabindex="-1"></a>    <span class="co"># solve the Problem</span></span>
-<span id="cb6-459"><a href="#cb6-459" aria-hidden="true" tabindex="-1"></a>    <span class="fu">solve!</span>(P)</span>
-<span id="cb6-460"><a href="#cb6-460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-461"><a href="#cb6-461" aria-hidden="true" tabindex="-1"></a>    <span class="co"># extract the values and compute the conserved values</span></span>
-<span id="cb6-462"><a href="#cb6-462" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> P.u</span>
-<span id="cb6-463"><a href="#cb6-463" aria-hidden="true" tabindex="-1"></a>    u2 <span class="op">=</span> u <span class="op">.*</span> u</span>
-<span id="cb6-464"><a href="#cb6-464" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-465"><a href="#cb6-465" aria-hidden="true" tabindex="-1"></a>    c1 <span class="op">=</span> <span class="fu">mapslices</span>(a <span class="op">-&gt;</span> <span class="fu">trapezoidal_rule</span>(x, a), u, dims <span class="op">=</span><span class="fl">1</span>)</span>
-<span id="cb6-466"><a href="#cb6-466" aria-hidden="true" tabindex="-1"></a>    c2 <span class="op">=</span> <span class="fu">mapslices</span>(a <span class="op">-&gt;</span> <span class="fu">trapezoidal_rule</span>(x, a), u2, dims <span class="op">=</span> <span class="fl">1</span>)</span>
-<span id="cb6-467"><a href="#cb6-467" aria-hidden="true" tabindex="-1"></a>    diff_c1 <span class="op">=</span> <span class="fu">maximum</span>(c1) <span class="op">-</span> <span class="fu">minimum</span>(c1)</span>
-<span id="cb6-468"><a href="#cb6-468" aria-hidden="true" tabindex="-1"></a>    diff_c2 <span class="op">=</span> <span class="fu">maximum</span>(c2) <span class="op">-</span> <span class="fu">minimum</span>(c2)</span>
-<span id="cb6-469"><a href="#cb6-469" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-470"><a href="#cb6-470" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;First two conserved quantities of the KdV-Equation:&quot;</span></span>
-<span id="cb6-471"><a href="#cb6-471" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;c1 ≈ %.8e </span><span class="sc">\n</span><span class="st">&quot;</span> <span class="fu">sum</span>(c1) <span class="op">/</span> <span class="fu">length</span>(c1)</span>
-<span id="cb6-472"><a href="#cb6-472" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;Maximal difference observed: %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> diff_c1</span>
-<span id="cb6-473"><a href="#cb6-473" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
-<span id="cb6-474"><a href="#cb6-474" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;c1 ≈ %.8e </span><span class="sc">\n</span><span class="st">&quot;</span> <span class="fu">sum</span>(c2) <span class="op">/</span> <span class="fu">length</span>(c2)</span>
-<span id="cb6-475"><a href="#cb6-475" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;Maximal difference observed: %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> diff_c2</span>
-<span id="cb6-476"><a href="#cb6-476" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a><span class="st"># Returns</span></span>
+<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a><span class="st">- `kdv_problem{F}`: An object representing the KdV problem with the specified parameters.</span></span>
+<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a><span class="st"># Example</span></span>
+<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a><span class="st">alpha = 1.0</span></span>
+<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a><span class="st">beta = 2.0</span></span>
+<span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a><span class="st">gamma = 3.0</span></span>
+<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a><span class="st">delta_x = 0.01</span></span>
+<span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a><span class="st">T = 5.0</span></span>
+<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a><span class="st">interval_length = 1.0</span></span>
+<span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a><span class="st">initial_values = [sin(2 * π * x) for x in 0:delta_x:interval_length]</span></span>
+<span id="cb6-301"><a href="#cb6-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-302"><a href="#cb6-302" aria-hidden="true" tabindex="-1"></a><span class="st">kdv = kdv_problem(alpha, beta, gamma, delta_x, T, interval_length, initial_values)</span></span>
+<span id="cb6-303"><a href="#cb6-303" aria-hidden="true" tabindex="-1"></a><span class="st">solve!(kdv)</span></span>
+<span id="cb6-304"><a href="#cb6-304" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-305"><a href="#cb6-305" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">solve!</span>(P<span class="op">::</span><span class="dt">kdv_problem</span>)</span>
+<span id="cb6-306"><a href="#cb6-306" aria-hidden="true" tabindex="-1"></a>    N_x, N_t <span class="op">=</span> <span class="fu">size</span>(P.u)</span>
+<span id="cb6-307"><a href="#cb6-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-308"><a href="#cb6-308" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use an implicit scheme to solve for the time - Δt, since two time steps </span></span>
+<span id="cb6-309"><a href="#cb6-309" aria-hidden="true" tabindex="-1"></a>    <span class="co"># are necessary for the Zabusky-Kruskal scheme</span></span>
+<span id="cb6-310"><a href="#cb6-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-311"><a href="#cb6-311" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>N_x<span class="op">-</span><span class="fl">1</span></span>
+<span id="cb6-312"><a href="#cb6-312" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate the indices according to the boundary conditions</span></span>
+<span id="cb6-313"><a href="#cb6-313" aria-hidden="true" tabindex="-1"></a>        in2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># two indices to the right (next index)</span></span>
+<span id="cb6-314"><a href="#cb6-314" aria-hidden="true" tabindex="-1"></a>        in1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># one index to the right (next index)</span></span>
+<span id="cb6-315"><a href="#cb6-315" aria-hidden="true" tabindex="-1"></a>        ip1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># one index before, (to the left)</span></span>
+<span id="cb6-316"><a href="#cb6-316" aria-hidden="true" tabindex="-1"></a>        ip2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># two indices before, (to the left)</span></span>
+<span id="cb6-317"><a href="#cb6-317" aria-hidden="true" tabindex="-1"></a>        k <span class="op">=</span> i <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb6-318"><a href="#cb6-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-319"><a href="#cb6-319" aria-hidden="true" tabindex="-1"></a>        dispersion <span class="op">=</span> P.beta <span class="op">*</span> ( <span class="op">-</span>P.u[ip2, <span class="fl">2</span>] <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> P.u[ip1, <span class="fl">2</span>] <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> P.u[in1, <span class="fl">2</span>] <span class="op">+</span> P.u[in2, <span class="fl">2</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x<span class="op">^</span><span class="fl">3</span>)</span>
+<span id="cb6-320"><a href="#cb6-320" aria-hidden="true" tabindex="-1"></a>        advection <span class="op">=</span> (P.gamma <span class="op">/</span> <span class="fl">3</span>) <span class="op">*</span> (P.u[ip1, <span class="fl">2</span>] <span class="op">+</span> P.u[k, <span class="fl">2</span>] <span class="op">+</span> P.u[in1, <span class="fl">2</span>]) <span class="op">*</span> ((P.u[in1, <span class="fl">2</span>] <span class="op">-</span> P.u[ip1, <span class="fl">2</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x))</span>
+<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a>        P.u[k, <span class="fl">1</span>] <span class="op">=</span> P.u[k, <span class="fl">2</span>] <span class="op">+</span> (P.delta_t <span class="op">/</span> P.alpha) <span class="op">*</span> (dispersion <span class="op">+</span> advection)</span>
+<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a>    <span class="co"># now apply the ZK-scheme since the initial values and the values at -Δt</span></span>
+<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a>    <span class="co"># are known</span></span>
+<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="fl">3</span><span class="op">:</span>N_t</span>
+<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>N_x<span class="op">-</span><span class="fl">1</span></span>
+<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate the indices according to the boundary conditions</span></span>
+<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>            in2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># two indices to the right (next index)</span></span>
+<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a>            in1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">+</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>   <span class="co"># one index to the right (next index)</span></span>
+<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>            ip1 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">1</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># one index before, (to the left)</span></span>
+<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>            ip2 <span class="op">=</span> <span class="fu">mod</span>(i <span class="op">-</span> <span class="fl">2</span>, N_x) <span class="op">+</span> <span class="fl">1</span>      <span class="co"># two indices before, (to the left)</span></span>
+<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>            k <span class="op">=</span> i <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>            dispersion <span class="op">=</span> P.beta <span class="op">*</span> ( <span class="op">-</span>P.u[ip2, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> P.u[ip1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> P.u[in1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> P.u[in2, j<span class="op">-</span><span class="fl">1</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x<span class="op">^</span><span class="fl">3</span>)</span>
+<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>            advection <span class="op">=</span> (P.gamma <span class="op">/</span> <span class="fl">3</span>) <span class="op">*</span> (P.u[ip1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> P.u[k, j<span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> P.u[in1, j<span class="op">-</span><span class="fl">1</span>]) <span class="op">*</span> ((P.u[in1, j<span class="op">-</span><span class="fl">1</span>] <span class="op">-</span> P.u[ip1, j<span class="op">-</span><span class="fl">1</span>]) <span class="op">/</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_x))</span>
+<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a>            P.u[k, j] <span class="op">=</span> P.u[k, j <span class="op">-</span> <span class="fl">2</span>] <span class="op">-</span> (<span class="fl">2</span> <span class="op">*</span> P.delta_t <span class="op">/</span> P.alpha) <span class="op">*</span> (dispersion <span class="op">+</span> advection)</span>
+<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a><span class="fu"># Testing with the soliton solution</span></span>
+<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>Since we have an analytic solution at hand, we can test our implementation against it. We have a free parameter $\sigma$, which we set $\sigma = 1$. While trying to show the convergence in various norms (1-, 2-norm and the infinity norm) I noticed the following things:</span>
+<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>The solitary wave must be completely contained within the boundary, otherwise the values are rubbish.</span>
+<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I notice a very fast convergence, but after a certain point, the error does not get any smaller.</span>
+<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a>However, we can see the convergence and thus verify that our implementation works. Below is the <span class="in">`Julia`</span><span class="sc">\`</span> function for testing the ZKS.</span>
+<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a><span class="st">test_ZK_scheme()</span></span>
+<span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a><span class="st">Test the Zk-scheme for the solution</span></span>
+<span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a><span class="st">u(x,t) = 0.5 * sech(0.5 * (x - t) - 4.0)^2</span></span>
+<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a><span class="st">for the KdV equation</span></span>
+<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a><span class="st">    0 = 1.0 * u_t + 1.0 * u_xxx + 6.0 * u_x * u </span></span>
+<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">test_ZK_scheme</span>()</span>
+<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>    σ <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>    start_point  <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>    end_point <span class="op">=</span> <span class="fl">20</span></span>
+<span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a>    interval_length <span class="op">=</span> end_point <span class="op">-</span> start_point</span>
+<span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a>    end_time <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exact_sol</span>(x,t) <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> σ <span class="op">*</span> <span class="fu">sech</span>(<span class="fu">sqrt</span>(σ) <span class="op">*</span> <span class="fl">0.5</span> <span class="op">*</span> (x <span class="op">-</span> σ<span class="op">*</span>t) <span class="op">-</span><span class="fl">4.0</span>)<span class="op">^</span><span class="fl">2</span></span>
+<span id="cb6-375"><a href="#cb6-375" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inital_values</span>(x) <span class="op">=</span> <span class="fu">exact_sol</span>(x, <span class="fl">0.0</span>)</span>
+<span id="cb6-376"><a href="#cb6-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-377"><a href="#cb6-377" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span><span class="fl">6</span></span>
+<span id="cb6-378"><a href="#cb6-378" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set up the problem</span></span>
+<span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a>        dx <span class="op">=</span> <span class="fl">0.5</span><span class="op">^</span>k</span>
+<span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(start_point, end_point, step<span class="op">=</span> dx))</span>
+<span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a>        initial_values <span class="op">=</span> <span class="fu">inital_values</span>.(x)</span>
+<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a>        P <span class="op">=</span> <span class="fu">kdv_problem</span>(<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">6.0</span>, dx, end_time, interval_length, initial_values)</span>
+<span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a>        <span class="co"># solve the Problem</span></span>
+<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a>        <span class="fu">solve!</span>(P)</span>
+<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute the error</span></span>
+<span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>        dt <span class="op">=</span> P.delta_t</span>
+<span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a>        approximate_solution <span class="op">=</span> P.u[<span class="op">:</span>, <span class="kw">end</span>]</span>
+<span id="cb6-390"><a href="#cb6-390" aria-hidden="true" tabindex="-1"></a>        exact_solution <span class="op">=</span> <span class="fu">exact_sol</span>.(x, end_time)</span>
+<span id="cb6-391"><a href="#cb6-391" aria-hidden="true" tabindex="-1"></a>        err_vec <span class="op">=</span> <span class="fu">abs</span>.(exact_solution <span class="op">-</span> approximate_solution)</span>
+<span id="cb6-392"><a href="#cb6-392" aria-hidden="true" tabindex="-1"></a>        <span class="co"># compute the error norms</span></span>
+<span id="cb6-393"><a href="#cb6-393" aria-hidden="true" tabindex="-1"></a>        err_inf_norm <span class="op">=</span> <span class="fu">maximum</span>(err_vec)</span>
+<span id="cb6-394"><a href="#cb6-394" aria-hidden="true" tabindex="-1"></a>        err_1_norm <span class="op">=</span> <span class="fu">trapezoidal_rule</span>(x, err_vec)</span>
+<span id="cb6-395"><a href="#cb6-395" aria-hidden="true" tabindex="-1"></a>        err_2_norm <span class="op">=</span> <span class="fu">sqrt</span>(<span class="fu">trapezoidal_rule</span>(x, err_vec <span class="op">.*</span> err_vec))</span>
+<span id="cb6-396"><a href="#cb6-396" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">&quot;+&quot;</span><span class="op">^</span><span class="fl">80</span>)</span>
+<span id="cb6-397"><a href="#cb6-397" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">&quot;k = </span><span class="sc">$</span>k<span class="st">&quot;</span>)</span>
+<span id="cb6-398"><a href="#cb6-398" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;dx = %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> dx</span>
+<span id="cb6-399"><a href="#cb6-399" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;dt = %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> dt</span>
+<span id="cb6-400"><a href="#cb6-400" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;error_inf_norm = %.3e </span><span class="sc">\n</span><span class="st">&quot;</span> err_inf_norm</span>
+<span id="cb6-401"><a href="#cb6-401" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;error_1_norm = %.3e </span><span class="sc">\n</span><span class="st">&quot;</span> err_1_norm</span>
+<span id="cb6-402"><a href="#cb6-402" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">&quot;error_2_norm = %.3e </span><span class="sc">\n</span><span class="st">&quot;</span> err_2_norm</span>
+<span id="cb6-403"><a href="#cb6-403" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-404"><a href="#cb6-404" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-405"><a href="#cb6-405" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-406"><a href="#cb6-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-407"><a href="#cb6-407" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-408"><a href="#cb6-408" aria-hidden="true" tabindex="-1"></a><span class="st">    trapezoidal_rule(x, y)</span></span>
+<span id="cb6-409"><a href="#cb6-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-410"><a href="#cb6-410" aria-hidden="true" tabindex="-1"></a><span class="st">Compute the numerical approximation of the definite integral using the trapezoidal rule.</span></span>
+<span id="cb6-411"><a href="#cb6-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-412"><a href="#cb6-412" aria-hidden="true" tabindex="-1"></a><span class="st"># Arguments</span></span>
+<span id="cb6-413"><a href="#cb6-413" aria-hidden="true" tabindex="-1"></a><span class="st">- `x::Vector`: Vector of sample points representing the independent variable.</span></span>
+<span id="cb6-414"><a href="#cb6-414" aria-hidden="true" tabindex="-1"></a><span class="st">- `y::Vector`: Vector of function values corresponding to each sample point.</span></span>
+<span id="cb6-415"><a href="#cb6-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-416"><a href="#cb6-416" aria-hidden="true" tabindex="-1"></a><span class="st"># Output</span></span>
+<span id="cb6-417"><a href="#cb6-417" aria-hidden="true" tabindex="-1"></a><span class="st">- Returns the numerical approximation of the definite integral using the trapezoidal rule.</span></span>
+<span id="cb6-418"><a href="#cb6-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-419"><a href="#cb6-419" aria-hidden="true" tabindex="-1"></a><span class="st"># Examples</span></span>
+<span id="cb6-420"><a href="#cb6-420" aria-hidden="true" tabindex="-1"></a><span class="st">x_values = [0.0, 0.1, 0.2, 0.3, 0.4]</span></span>
+<span id="cb6-421"><a href="#cb6-421" aria-hidden="true" tabindex="-1"></a><span class="st">y_values = [f(x) for x in x_values]  # Replace f(x) with your function</span></span>
+<span id="cb6-422"><a href="#cb6-422" aria-hidden="true" tabindex="-1"></a><span class="st">result = trapezoidal_rule(x_values, y_values)</span></span>
+<span id="cb6-423"><a href="#cb6-423" aria-hidden="true" tabindex="-1"></a><span class="st">println(&quot;Trapezoidal Rule Integral: &quot;, result)</span></span>
+<span id="cb6-424"><a href="#cb6-424" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-425"><a href="#cb6-425" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">trapezoidal_rule</span>(x, y)</span>
+<span id="cb6-426"><a href="#cb6-426" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> <span class="fu">diff</span>(x)</span>
+<span id="cb6-427"><a href="#cb6-427" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">sum</span>((y[<span class="fl">1</span><span class="op">:</span><span class="kw">end</span><span class="op">-</span><span class="fl">1</span>] <span class="op">+</span> y[<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>]) <span class="op">.*</span> h) <span class="op">*</span> <span class="fl">0.5</span></span>
+<span id="cb6-428"><a href="#cb6-428" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-429"><a href="#cb6-429" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-430"><a href="#cb6-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-431"><a href="#cb6-431" aria-hidden="true" tabindex="-1"></a><span class="fu"># The conservation of integrals</span></span>
+<span id="cb6-432"><a href="#cb6-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-433"><a href="#cb6-433" aria-hidden="true" tabindex="-1"></a>One of the most intriguing properties of the KdV-equation is the conservation of infinitely many quantities which is shown in the article @Miura1968. The article *Korteveg-de Vrie Eequation* of Alper Korkmaz in @Encyclopedia2015 lists the first quantities which are conserved by the KdV-equation, namely</span>
+<span id="cb6-434"><a href="#cb6-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-435"><a href="#cb6-435" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-436"><a href="#cb6-436" aria-hidden="true" tabindex="-1"></a>C_1 = \int_{-\infty}^\infty u\; dx \qquad \text{and} <span class="sc">\\</span> C_2 = \int_{-\infty}^\infty u^2\; dx.</span>
+<span id="cb6-437"><a href="#cb6-437" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb6-438"><a href="#cb6-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-439"><a href="#cb6-439" aria-hidden="true" tabindex="-1"></a>We can compute these conserved quantities by approximating the integrals using the trapezoidal rule and show that those are indeed conserved numerically up to a certain degree.</span>
+<span id="cb6-440"><a href="#cb6-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-443"><a href="#cb6-443" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb6-444"><a href="#cb6-444" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">show_conservation</span>()</span>
+<span id="cb6-445"><a href="#cb6-445" aria-hidden="true" tabindex="-1"></a>    <span class="co"># set up the KdV Equation and solve it</span></span>
+<span id="cb6-446"><a href="#cb6-446" aria-hidden="true" tabindex="-1"></a>    σ <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb6-447"><a href="#cb6-447" aria-hidden="true" tabindex="-1"></a>    start_point  <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb6-448"><a href="#cb6-448" aria-hidden="true" tabindex="-1"></a>    end_point <span class="op">=</span> <span class="fl">20</span></span>
+<span id="cb6-449"><a href="#cb6-449" aria-hidden="true" tabindex="-1"></a>    interval_length <span class="op">=</span> end_point <span class="op">-</span> start_point</span>
+<span id="cb6-450"><a href="#cb6-450" aria-hidden="true" tabindex="-1"></a>    end_time <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb6-451"><a href="#cb6-451" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exact_sol</span>(x,t) <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> σ <span class="op">*</span> <span class="fu">sech</span>(<span class="fu">sqrt</span>(σ) <span class="op">*</span> <span class="fl">0.5</span> <span class="op">*</span> (x <span class="op">-</span> σ<span class="op">*</span>t) <span class="op">-</span><span class="fl">4.0</span>)<span class="op">^</span><span class="fl">2</span></span>
+<span id="cb6-452"><a href="#cb6-452" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inital_values</span>(x) <span class="op">=</span> <span class="fu">exact_sol</span>(x, <span class="fl">0.0</span>)</span>
+<span id="cb6-453"><a href="#cb6-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-454"><a href="#cb6-454" aria-hidden="true" tabindex="-1"></a>    dx <span class="op">=</span> <span class="fl">0.5</span><span class="op">^</span><span class="fl">4</span></span>
+<span id="cb6-455"><a href="#cb6-455" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(start_point, end_point, step<span class="op">=</span> dx))</span>
+<span id="cb6-456"><a href="#cb6-456" aria-hidden="true" tabindex="-1"></a>    initial_values <span class="op">=</span> <span class="fu">inital_values</span>.(x)</span>
+<span id="cb6-457"><a href="#cb6-457" aria-hidden="true" tabindex="-1"></a>    P <span class="op">=</span> <span class="fu">kdv_problem</span>(<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">6.0</span>, dx, end_time, interval_length, initial_values)</span>
+<span id="cb6-458"><a href="#cb6-458" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-459"><a href="#cb6-459" aria-hidden="true" tabindex="-1"></a>    <span class="co"># solve the Problem</span></span>
+<span id="cb6-460"><a href="#cb6-460" aria-hidden="true" tabindex="-1"></a>    <span class="fu">solve!</span>(P)</span>
+<span id="cb6-461"><a href="#cb6-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-462"><a href="#cb6-462" aria-hidden="true" tabindex="-1"></a>    <span class="co"># extract the values and compute the conserved values</span></span>
+<span id="cb6-463"><a href="#cb6-463" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> P.u</span>
+<span id="cb6-464"><a href="#cb6-464" aria-hidden="true" tabindex="-1"></a>    u2 <span class="op">=</span> u <span class="op">.*</span> u</span>
+<span id="cb6-465"><a href="#cb6-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-466"><a href="#cb6-466" aria-hidden="true" tabindex="-1"></a>    c1 <span class="op">=</span> <span class="fu">mapslices</span>(a <span class="op">-&gt;</span> <span class="fu">trapezoidal_rule</span>(x, a), u, dims <span class="op">=</span><span class="fl">1</span>)</span>
+<span id="cb6-467"><a href="#cb6-467" aria-hidden="true" tabindex="-1"></a>    c2 <span class="op">=</span> <span class="fu">mapslices</span>(a <span class="op">-&gt;</span> <span class="fu">trapezoidal_rule</span>(x, a), u2, dims <span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb6-468"><a href="#cb6-468" aria-hidden="true" tabindex="-1"></a>    diff_c1 <span class="op">=</span> <span class="fu">maximum</span>(c1) <span class="op">-</span> <span class="fu">minimum</span>(c1)</span>
+<span id="cb6-469"><a href="#cb6-469" aria-hidden="true" tabindex="-1"></a>    diff_c2 <span class="op">=</span> <span class="fu">maximum</span>(c2) <span class="op">-</span> <span class="fu">minimum</span>(c2)</span>
+<span id="cb6-470"><a href="#cb6-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-471"><a href="#cb6-471" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;First two conserved quantities of the KdV-Equation:&quot;</span></span>
+<span id="cb6-472"><a href="#cb6-472" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;c1 ≈ %.8e </span><span class="sc">\n</span><span class="st">&quot;</span> <span class="fu">sum</span>(c1) <span class="op">/</span> <span class="fu">length</span>(c1)</span>
+<span id="cb6-473"><a href="#cb6-473" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;Maximal difference observed: %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> diff_c1</span>
+<span id="cb6-474"><a href="#cb6-474" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb6-475"><a href="#cb6-475" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;c1 ≈ %.8e </span><span class="sc">\n</span><span class="st">&quot;</span> <span class="fu">sum</span>(c2) <span class="op">/</span> <span class="fu">length</span>(c2)</span>
+<span id="cb6-476"><a href="#cb6-476" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">&quot;Maximal difference observed: %.3e</span><span class="sc">\n</span><span class="st">&quot;</span> diff_c2</span>
 <span id="cb6-477"><a href="#cb6-477" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-478"><a href="#cb6-478" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb6-479"><a href="#cb6-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-480"><a href="#cb6-480" aria-hidden="true" tabindex="-1"></a><span class="fu">show_conservation</span>()</span>
-<span id="cb6-481"><a href="#cb6-481" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-478"><a href="#cb6-478" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-479"><a href="#cb6-479" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-480"><a href="#cb6-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-481"><a href="#cb6-481" aria-hidden="true" tabindex="-1"></a><span class="fu">show_conservation</span>()</span>
+<span id="cb6-482"><a href="#cb6-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

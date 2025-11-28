@@ -2,6 +2,8 @@
 title: "How to create a choroplath map in R"
 author: "Niclas"
 date: 2023-08-24
+execute:
+    cache: true
 ---
 
 Now and then, you come across choropleth maps presented as animated graphics, like [on /r/dataisbeautiful](https://old.reddit.com/r/dataisbeautiful/comments/zhwm3p/oc_2022_top_trending_searches_by_state/). Personally, I'm not so interested in the end result, but rather in the process that leads to the result. This blog post demonstrates how to create an animated GIF of a choropleth map using R.

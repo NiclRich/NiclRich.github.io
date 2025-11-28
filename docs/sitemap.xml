@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://niclrich.github.io/blog_posts/handout_berlin_sep_2023.html</loc>
+    <lastmod>2025-11-23T19:50:38.847Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog_posts/kdv_equation.html</loc>
+    <lastmod>2025-11-28T17:27:46.928Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog_posts/choropleth_map_brandenburg.html</loc>
+    <lastmod>2025-11-28T17:31:12.374Z</lastmod>
+  </url>
+  <url>
     <loc>https://niclrich.github.io/index.html</loc>
-    <lastmod>2025-11-23T20:01:56.644Z</lastmod>
+    <lastmod>2025-11-28T17:30:23.045Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog.html</loc>
+    <lastmod>2025-11-23T21:30:26.494Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/about.html</loc>
+    <lastmod>2025-11-28T17:30:33.572Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog_posts/arima_modeling.html</loc>
+    <lastmod>2025-11-28T17:31:31.858Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog_posts/csp_linear_programming.html</loc>
+    <lastmod>2025-11-28T17:31:20.091Z</lastmod>
+  </url>
+  <url>
+    <loc>https://niclrich.github.io/blog_posts/LP_zero_sum_games.html</loc>
+    <lastmod>2025-11-28T17:32:57.698Z</lastmod>
   </url>
 </urlset>

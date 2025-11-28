@@ -4,6 +4,7 @@ author: "Niclas"
 date: 2023-10-31
 execute: 
   warning: false
+  cache: true
 reference-location: margin
 citation-location: margin
 bibliography: references.bib

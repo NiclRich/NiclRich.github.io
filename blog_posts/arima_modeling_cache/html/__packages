@@ -1,0 +1,14 @@
+lubridate
+dplyr
+httr2
+jsonlite
+glue
+kableExtra
+fabletools
+feasts
+tsibble
+fable
+zoo
+ggplot2
+scales
+gtrendsR

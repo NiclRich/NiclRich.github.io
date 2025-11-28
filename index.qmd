@@ -11,6 +11,8 @@ about:
     - icon: mail
       text: E-Mail
       href: mailto:info@niclasrichter.de
+execute:
+    cache: true
 ---
 
 # Bio
